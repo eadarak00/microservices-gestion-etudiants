@@ -7,6 +7,25 @@ services:
     networks:
       - microservices-network
     restart: always
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7777/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  eureka-server:
+    build: ./microservices/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:7777
+    depends_on:
+      config-server:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    restart: always
 
 networks:
   microservices-network:

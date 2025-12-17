@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: eureka-server
+
+  config:
+    import: optional:configserver:http://config-server:7777
+
+  cloud:
+    config:
+      uri: http://config-server:7777
+
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+server:
+  port: 8761  
+  
