@@ -1,0 +1,13 @@
+services:
+  config-server:
+    build: ./microservices/config-server
+    container_name: config-server
+    ports:
+      - "7777:7777"
+    networks:
+      - microservices-network
+    restart: always
+
+networks:
+  microservices-network:
+    driver: bridge
