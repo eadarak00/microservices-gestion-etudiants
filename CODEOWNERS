@@ -1,0 +1,5 @@
+# This file is used to define code owners for the repository.
+# Syntax: https://help.github.com/articles/about-codeowners/
+
+# Global owner
+*       @eadarak00
