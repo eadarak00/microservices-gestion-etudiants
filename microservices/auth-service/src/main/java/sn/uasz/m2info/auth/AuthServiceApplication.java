@@ -1,4 +1,4 @@
-package sn.uasz.m2Info.auth;
+package sn.uasz.m2info.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

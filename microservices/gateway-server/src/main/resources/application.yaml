@@ -3,11 +3,11 @@ spring:
     name: gateway-server
 
   config:
-    import: optional:configserver:http://localhost:7777
+    import: ${SPRING_CONFIG_IMPORT:optional:configserver:http://localhost:7777}
 
   cloud:
     config:
-      uri: http://config-server:7777
+      uri: ${CONFIG_SERVER_URL:http://localhost:7777}
 
 logging:
   level:

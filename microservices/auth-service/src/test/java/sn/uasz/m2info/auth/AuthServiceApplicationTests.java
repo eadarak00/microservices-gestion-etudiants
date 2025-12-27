@@ -1,4 +1,4 @@
-package sn.uasz.m2Info.auth;
+package sn.uasz.m2info.auth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
