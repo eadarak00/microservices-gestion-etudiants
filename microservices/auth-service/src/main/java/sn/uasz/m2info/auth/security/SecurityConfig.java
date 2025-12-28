@@ -3,28 +3,35 @@ package sn.uasz.m2info.auth.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
-@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
-            .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/api/auth/**", 
-                    "/actuator/**",
-                    "/swagger-ui/**",    
-                    "/v3/api-docs/**" 
-                ).permitAll()
+
+                // endpoints publics
+                .requestMatchers("/api/auth/login", "/actuator/**").permitAll()
+
+                // sécurisation par rôles
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/enseignant/**").hasRole("ENSEIGNANT")
+                .requestMatchers("/etudiant/**").hasRole("ETUDIANT")
+
                 .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt
+                    .jwtAuthenticationConverter(new JwtAuthConverter())
+                )
             );
-        
+
         return http.build();
     }
 }
