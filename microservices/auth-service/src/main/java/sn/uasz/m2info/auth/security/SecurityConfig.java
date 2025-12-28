@@ -19,8 +19,8 @@ public class SecurityConfig {
                 .requestMatchers(
                     "/api/auth/**", 
                     "/actuator/**",
-                    "/swagger-ui/**",    // If using Swagger
-                    "/v3/api-docs/**"    // If using OpenAPI
+                    "/swagger-ui/**",    
+                    "/v3/api-docs/**" 
                 ).permitAll()
                 .anyRequest().authenticated()
             );
