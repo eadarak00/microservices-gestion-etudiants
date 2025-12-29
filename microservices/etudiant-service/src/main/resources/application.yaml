@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: etudiant-service
+
+  config:
+    import: ${SPRING_CONFIG_IMPORT:optional:configserver:${CONFIG_SERVER_URL:http://localhost:7777}}
+  
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URL:http://localhost:7777}
