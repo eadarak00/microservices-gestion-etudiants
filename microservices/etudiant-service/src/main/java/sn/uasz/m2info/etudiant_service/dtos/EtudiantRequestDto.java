@@ -25,15 +25,10 @@ public class EtudiantRequestDto {
     @Email(message = "Email invalide")
     private String email;
 
-    @Pattern(
-        regexp = "^(\\+221|221)?7\\d{8}$",
-        message = "Numéro sénégalais invalide"
-    )
+    @Pattern(regexp = "^(\\+221|221)?7\\d{8}$", message = "Numéro sénégalais invalide")
     private String telephone;
 
-    @Pattern(
-        regexp = "[MF]",
-        message = "Le sexe doit être 'M' ou 'F'"
-    )
+    @Pattern(regexp = "[MF]", message = "Le sexe doit être 'M' ou 'F'")
     private String sexe;
+    private String password;
 }

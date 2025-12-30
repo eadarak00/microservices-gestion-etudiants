@@ -8,3 +8,11 @@ spring:
   cloud:
     config:
       uri: ${CONFIG_SERVER_URL:http://localhost:7777}
+
+keycloak:
+  server-url: ${KEYCLOAK_SERVER_URL:http://localhost:9091}
+  realm: ${KEYCLOAK_REALM:gestion-etudiants}
+  admin:
+    username: ${KEYCLOAK_ADMIN_USERNAME:admin}
+    password: ${KEYCLOAK_ADMIN_PASSWORD:admin}
+    client-id: ${KEYCLOAK_ADMIN_CLIENT_ID:admin-cli}

@@ -18,6 +18,7 @@ public class EtudiantMapper {
         e.setEmail(dto.getEmail());
         e.setTelephone(dto.getTelephone());
         e.setSexe(dto.getSexe());
+        e.setPassword(dto.getPassword());
         return e;
     }
 

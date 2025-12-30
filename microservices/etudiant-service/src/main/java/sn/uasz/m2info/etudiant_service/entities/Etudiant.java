@@ -33,4 +33,5 @@ public class Etudiant {
     private String email;
     private String telephone;
     private String sexe;
+    private String password;
 }
