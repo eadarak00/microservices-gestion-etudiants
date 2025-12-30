@@ -6,11 +6,13 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import sn.uasz.m2info.etudiant_service.clients.AuthServiceClient;
 import sn.uasz.m2info.etudiant_service.dtos.CreateUserRequest;
 import sn.uasz.m2info.etudiant_service.dtos.EtudiantRequestDto;
 import sn.uasz.m2info.etudiant_service.dtos.EtudiantResponseDto;
 import sn.uasz.m2info.etudiant_service.entities.Etudiant;
+import sn.uasz.m2info.etudiant_service.exceptions.EtudiantCreationException;
 import sn.uasz.m2info.etudiant_service.exceptions.ResourceNotFoundException;
 import sn.uasz.m2info.etudiant_service.mappers.EtudiantMapper;
 import sn.uasz.m2info.etudiant_service.repositories.EtudiantRepository;
@@ -19,6 +21,7 @@ import sn.uasz.m2info.etudiant_service.repositories.InscriptionRepository;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class EtudiantService {
 
     private final EtudiantRepository repo;
@@ -29,7 +32,37 @@ public class EtudiantService {
 
     public EtudiantResponseDto creer(EtudiantRequestDto dto) {
 
-        // Création utilisateur Keycloak via auth-service
+        String username = dto.getEmail(); // ou matricule
+        boolean userCreated = false;
+
+        try {
+            // Créer utilisateur (auth-service)
+            authClient.createUser(buildUser(dto));
+            userCreated = true;
+
+            // Créer étudiant (DB locale)
+            Etudiant etudiant = EtudiantMapper.toEntity(dto);
+            Etudiant saved = repo.save(etudiant);
+
+            return EtudiantMapper.toDto(saved);
+
+        } catch (Exception ex) {
+
+            // \Compensation (rollback distribué)
+            if (userCreated) {
+                try {
+                    authClient.deleteUser(username);
+                } catch (Exception ignored) {
+                    log.warn("Rollback auth-service échoué", ignored);
+                }
+            }
+
+            throw new EtudiantCreationException(
+                    "Création étudiant échouée, opération annulée", ex);
+        }
+    }
+
+    private CreateUserRequest buildUser(EtudiantRequestDto dto) {
         CreateUserRequest user = new CreateUserRequest();
         user.setUsername(dto.getEmail());
         user.setEmail(dto.getEmail());
@@ -37,12 +70,7 @@ public class EtudiantService {
         user.setLastName(dto.getNom());
         user.setPassword(dto.getPassword());
         user.setRole("ETUDIANT");
-
-        authClient.createUser(user);
-
-        // Création étudiant local
-        Etudiant e = EtudiantMapper.toEntity(dto);
-        return EtudiantMapper.toDto(repo.save(e));
+        return user;
     }
 
     public EtudiantResponseDto modifier(Long id, EtudiantRequestDto dto) {

@@ -58,4 +58,18 @@ public class KeycloakAdminService {
                 .realmLevel()
                 .add(List.of(role));
     }
+
+    public void deleteUser(String username) {
+
+        UsersResource users = keycloak.realm(realm).users();
+
+        List<UserRepresentation> result = users.search(username);
+
+        if (result.isEmpty()) {
+            return; // idempotent (important pour tolérance aux pannes)
+        }
+
+        String userId = result.get(0).getId();
+        users.get(userId).remove();
+    }
 }
