@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import sn.uasz.m2info.etudiant_service.dtos.ChangerEtatInscriptionDto;
+import sn.uasz.m2info.etudiant_service.dtos.EtudiantResponseDto;
 import sn.uasz.m2info.etudiant_service.dtos.InscriptionRequestDto;
 import sn.uasz.m2info.etudiant_service.dtos.InscriptionResponseDto;
 import sn.uasz.m2info.etudiant_service.services.InscriptionService;
@@ -45,5 +46,10 @@ public class InscriptionController {
     @GetMapping("/etudiant/{etudiantId}")
     public List<InscriptionResponseDto> getDossierEtudiant(@PathVariable Long etudiantId) {
         return service.getDossierEtudiant(etudiantId);
+    }
+
+    @GetMapping("/classe/{classeId}/etudiants")
+    public List<EtudiantResponseDto> getEtudiantsByClasse(@PathVariable Long classeId) {
+        return service.getEtudiantsByClasse(classeId);
     }
 }

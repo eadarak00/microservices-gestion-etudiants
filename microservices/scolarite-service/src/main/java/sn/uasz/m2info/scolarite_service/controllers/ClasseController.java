@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import sn.uasz.m2info.scolarite_service.dtos.ClasseRequestDto;
 import sn.uasz.m2info.scolarite_service.dtos.ClasseResponseDto;
+import sn.uasz.m2info.scolarite_service.dtos.EtudiantResponseDto;
 import sn.uasz.m2info.scolarite_service.services.ClasseService;
 
 @RestController
@@ -32,8 +33,7 @@ public class ClasseController {
     @PutMapping("/{id}")
     public ClasseResponseDto modifier(
             @PathVariable Long id,
-            @RequestBody @Valid ClasseRequestDto dto
-    ) {
+            @RequestBody @Valid ClasseRequestDto dto) {
         return service.modifier(id, dto);
     }
 
@@ -51,4 +51,15 @@ public class ClasseController {
     public List<ClasseResponseDto> getAll() {
         return service.getAll();
     }
+
+    @GetMapping("/{id}/exists")
+    public boolean classeExists(@PathVariable Long id) {
+        return service.classeExists(id);
+    }
+
+    @GetMapping("/{id}/etudiants")
+    public List<EtudiantResponseDto> getClasseAvecEtudiants(@PathVariable Long id) {
+        return service.getClasseAvecEtudiants(id);
+    }
+
 }
