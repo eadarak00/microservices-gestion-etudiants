@@ -1,5 +1,7 @@
 package sn.uasz.m2info.notes_service.entities;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +31,8 @@ public class Note {
     private Long etudiantId;
 
     private Double valeur;
+
+    private LocalDate dateSaisie;
 
     @ManyToOne
     @JoinColumn(name = "evaluation_id")

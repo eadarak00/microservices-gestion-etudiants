@@ -1,5 +1,6 @@
 package sn.uasz.m2info.notes_service.mappers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,7 @@ public class NoteMapper {
         Note note = new Note();
         note.setEtudiantId(dto.getEtudiantId());
         note.setValeur(dto.getValeur());
+        note.setDateSaisie(LocalDate.now());
         note.setEvaluation(evaluation);
         return note;
     }
@@ -36,6 +38,7 @@ public class NoteMapper {
     public static void updateEntity(Note note, NoteRequestDto dto, Evaluation evaluation) {
         note.setEtudiantId(dto.getEtudiantId());
         note.setValeur(dto.getValeur());
+        note.setDateSaisie(LocalDate.now());
         note.setEvaluation(evaluation);
     }
 }

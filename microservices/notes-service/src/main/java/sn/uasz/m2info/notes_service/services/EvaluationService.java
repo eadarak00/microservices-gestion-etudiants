@@ -24,14 +24,12 @@ public class EvaluationService {
         return EvaluationMapper.toDto(repository.save(evaluation));
     }
 
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public EvaluationResponseDto getById(Long id) {
         Evaluation evaluation = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Evaluation not found"));
         return EvaluationMapper.toDto(evaluation);
     }
 
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<EvaluationResponseDto> getAll() {
         return EvaluationMapper.toDtoList(repository.findAll());
     }
