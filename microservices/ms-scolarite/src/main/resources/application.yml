@@ -1,0 +1,48 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: scolarite-service
+  datasource:
+    url: jdbc:mysql://scolarite-mysql:3306/scolarite_db
+    username: scolarite
+    password: scolarite
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+
+etudiant:
+  service:
+    url: http://localhost:9999
+
+feign:
+  circuitbreaker:
+    enabled: true
+
+
+# Feign URL fixe pour test fallback
+etudiant-service:
+  url: http://localhost:9999  # Port fictif pour test (service absent)
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      etudiant-service:
+        registerHealthIndicator: true
+        slidingWindowSize: 5
+        minimumNumberOfCalls: 1
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
