@@ -16,6 +16,7 @@ public class EnseignantMapper {
                 .email(dto.getEmail())
                 .telephone(dto.getTelephone())
                 .specialite(dto.getSpecialite())
+                .password(dto.getPassword())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class EnseignantMapper {
         e.setEmail(dto.getEmail());
         e.setTelephone(dto.getTelephone());
         e.setSpecialite(dto.getSpecialite());
+        e.setPassword(dto.getPassword());
     }
 
     public static EnseignantResponseDto toDto(Enseignant e) {

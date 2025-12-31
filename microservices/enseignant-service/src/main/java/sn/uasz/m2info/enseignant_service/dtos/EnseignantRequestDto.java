@@ -24,4 +24,7 @@ public class EnseignantRequestDto {
     private String telephone;
 
     private String specialite;
+
+    @NotBlank
+    private String password;
 }

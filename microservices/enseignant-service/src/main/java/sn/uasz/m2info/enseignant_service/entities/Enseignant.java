@@ -35,4 +35,6 @@ public class Enseignant {
     private String telephone;
 
     private String specialite;
+
+    private String password;
 }

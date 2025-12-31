@@ -12,4 +12,6 @@ public interface AffectationRepository extends JpaRepository<Affectation, Long> 
     List<Affectation> findByClasseId(Long classeId);
 
     List<Affectation> findByEnseignantId(Long enseignantId);
+
+    boolean existsByClasseIdAndMatiereId(Long classeId, Long matiereId);
 }
