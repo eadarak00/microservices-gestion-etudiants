@@ -64,7 +64,7 @@ public class ClasseController {
     }
 
     @GetMapping("/{id}/etudiants")
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getClasseAvecEtudiants(@PathVariable Long id) {
         return service.getClasseAvecEtudiants(id);
     }

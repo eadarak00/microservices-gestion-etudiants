@@ -47,7 +47,7 @@ public class AffectationController {
      * Lister les affectations par enseignant
      */
     @GetMapping("/enseignant/{enseignantId}")
-    @PreAuthorize("hasRole('ADMIN', 'ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ENSEIGNANT')")
     public List<AffectationResponseDto> getByEnseignant(
             @PathVariable Long enseignantId) {
         return service.getByEnseignant(enseignantId);

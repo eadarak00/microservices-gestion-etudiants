@@ -26,14 +26,14 @@ public class EtudiantController {
     private final EtudiantService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public EtudiantResponseDto creer(
             @Valid @RequestBody EtudiantRequestDto dto) {
         return service.creer(dto);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public EtudiantResponseDto modifier(
             @PathVariable Long id,
             @Valid @RequestBody EtudiantRequestDto dto) {
@@ -57,7 +57,7 @@ public class EtudiantController {
     }
 
     @GetMapping("/classe/{classeId}")
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getByClasse(@PathVariable Long classeId) {
         return service.getByClasse(classeId);
     }

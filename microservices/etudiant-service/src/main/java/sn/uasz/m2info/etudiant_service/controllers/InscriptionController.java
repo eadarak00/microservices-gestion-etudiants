@@ -27,7 +27,7 @@ public class InscriptionController {
     private final InscriptionService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public InscriptionResponseDto inscrire(
             @Valid @RequestBody InscriptionRequestDto dto) {
         return service.inscrire(dto.getEtudiantId(), dto.getClasseId());
@@ -42,19 +42,19 @@ public class InscriptionController {
     }
 
     @GetMapping("/classe/{classeId}")
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public List<InscriptionResponseDto> getByClasse(@PathVariable Long classeId) {
         return service.getByClasse(classeId);
     }
 
     @GetMapping("/etudiant/{etudiantId}")
-    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public List<InscriptionResponseDto> getDossierEtudiant(@PathVariable Long etudiantId) {
         return service.getDossierEtudiant(etudiantId);
     }
 
     @GetMapping("/classe/{classeId}/etudiants")
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getEtudiantsByClasse(@PathVariable Long classeId) {
         return service.getEtudiantsByClasse(classeId);
     }

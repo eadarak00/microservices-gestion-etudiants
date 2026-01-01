@@ -1,4 +1,4 @@
-package sn.uasz.m2info.scolarite_service.security;
+package sn.uasz.m2info.notes_service.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -26,14 +26,14 @@ public class EnseignantController {
     private final EnseignantService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public EnseignantResponseDto creer(
             @Valid @RequestBody EnseignantRequestDto dto) {
         return service.creer(dto);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public EnseignantResponseDto modifier(
             @PathVariable Long id,
             @Valid @RequestBody EnseignantRequestDto dto) {
@@ -47,7 +47,7 @@ public class EnseignantController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public EnseignantResponseDto getById(@PathVariable Long id) {
         return service.getById(id);
     }

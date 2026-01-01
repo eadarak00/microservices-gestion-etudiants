@@ -9,7 +9,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebFluxSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
         @Bean
@@ -19,10 +19,9 @@ public class SecurityConfig {
                                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                                 .authorizeExchange(exchanges -> exchanges
                                                 .anyExchange().permitAll())
-                                // Temporarily disabled for debugging
-                                // .oauth2ResourceServer(oauth2 -> oauth2
-                                // .jwt(jwt -> jwt
-                                // .jwtAuthenticationConverter(new JwtAuthConverter())))
+                                .oauth2ResourceServer(oauth2 -> oauth2
+                                .jwt(jwt -> jwt
+                                .jwtAuthenticationConverter(new JwtAuthConverter())))
                                 .build();
         }
 }
