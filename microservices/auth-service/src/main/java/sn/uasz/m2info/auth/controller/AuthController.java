@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import sn.uasz.m2info.auth.dto.LoginRequest;
+import sn.uasz.m2info.auth.dto.LogoutRequest;
 import sn.uasz.m2info.auth.service.KeycloakAuthService;
-
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,5 +23,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginRequest request) {
         return authService.login(request.username(), request.password());
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
+        return authService.logout(request.refreshToken());
     }
 }

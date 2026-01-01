@@ -22,6 +22,7 @@ public class SecurityConfig {
                                                 // endpoints publics
                                                 .requestMatchers(
                                                                 "/api/auth/login",
+                                                                "/api/auth/logout",
                                                                 "/actuator/**",
                                                                 "/api/auth/users")
                                                 .permitAll()

@@ -15,7 +15,9 @@ services:
       start_period: 60s
 
   auth-service:
-    build: ./microservices/auth-service
+    build:
+      context: ./microservices/auth-service
+      network: host
     container_name: auth-service
     ports:
       - "7076:7076"
@@ -47,7 +49,9 @@ services:
       start_period: 60s
 
   eureka-server:
-    build: ./microservices/eureka-server
+    build:
+      context: ./microservices/eureka-server
+      network: host
     container_name: eureka-server
     ports:
       - "8761:8761"
@@ -67,7 +71,9 @@ services:
       start_period: 60s
 
   gateway-server:
-    build: ./microservices/gateway-server
+    build:
+      context: ./microservices/gateway-server
+      network: host
     container_name: gateway-server
     ports:
       - "7070:7070"
@@ -127,7 +133,9 @@ services:
       start_period: 30s
 
   etudiant-service:
-    build: ./microservices/etudiant-service
+    build:
+      context: ./microservices/etudiant-service
+      network: host
     container_name: etudiant-service
     ports:
       - "7071:7071"
@@ -178,7 +186,9 @@ services:
       start_period: 30s
 
   scolarite-service:
-    build: ./microservices/scolarite-service
+    build:
+      context: ./microservices/scolarite-service
+      network: host
     container_name: scolarite-service
     ports:
       - "7072:7072"
@@ -229,7 +239,9 @@ services:
       start_period: 30s
 
   enseignant-service:
-    build: ./microservices/enseignant-service
+    build:
+      context: ./microservices/enseignant-service
+      network: host
     container_name: enseignant-service
     ports:
       - "7073:7073"
@@ -280,7 +292,9 @@ services:
       start_period: 30s
 
   notes-service:
-    build: ./microservices/notes-service
+    build:
+      context: ./microservices/notes-service
+      network: host
     container_name: notes-service
     ports:
       - "7074:7074"

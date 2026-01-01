@@ -11,9 +11,16 @@ spring:
 
 logging:
   level:
-    "[org.springframework.cloud.gateway]": INFO
+    "[org.springframework.cloud.gateway]": DEBUG
+    "[org.springframework.cloud.gateway.route]": DEBUG
 
 management:
   endpoint:
     health:
       show-details: always
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
