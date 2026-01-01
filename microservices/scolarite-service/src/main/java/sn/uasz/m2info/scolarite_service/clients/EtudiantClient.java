@@ -11,7 +11,7 @@ import sn.uasz.m2info.scolarite_service.dtos.EtudiantResponseDto;
 @FeignClient(name = "etudiant-service", fallback = EtudiantClientFallback.class)
 public interface EtudiantClient {
 
-    @GetMapping("/inscriptions/classe/{classeId}/etudiants")
+    @GetMapping("/api/inscriptions/classe/{classeId}/etudiants")
     List<EtudiantResponseDto> getEtudiantsByClasse(@PathVariable Long classeId);
 
 }

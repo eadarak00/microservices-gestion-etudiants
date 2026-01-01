@@ -2,6 +2,7 @@ package sn.uasz.m2info.scolarite_service.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,18 +20,20 @@ import sn.uasz.m2info.scolarite_service.dtos.EtudiantResponseDto;
 import sn.uasz.m2info.scolarite_service.services.ClasseService;
 
 @RestController
-@RequestMapping("/classes")
+@RequestMapping("/api/classes")
 @RequiredArgsConstructor
 public class ClasseController {
 
     private final ClasseService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ClasseResponseDto creer(@RequestBody @Valid ClasseRequestDto dto) {
         return service.creer(dto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ClasseResponseDto modifier(
             @PathVariable Long id,
             @RequestBody @Valid ClasseRequestDto dto) {
@@ -38,16 +41,19 @@ public class ClasseController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void supprimer(@PathVariable Long id) {
         service.supprimer(id);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ClasseResponseDto getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<ClasseResponseDto> getAll() {
         return service.getAll();
     }
@@ -58,6 +64,7 @@ public class ClasseController {
     }
 
     @GetMapping("/{id}/etudiants")
+    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getClasseAvecEtudiants(@PathVariable Long id) {
         return service.getClasseAvecEtudiants(id);
     }

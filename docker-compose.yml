@@ -257,6 +257,57 @@ services:
       retries: 10
       start_period: 60s
 
+  notes-db:
+    image: mariadb:11.2
+    container_name: notes-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notes_db
+      MYSQL_USER: notes
+      MYSQL_PASSWORD: notes
+    ports:
+      - "3310:3306"
+    volumes:
+      - notes_db_data:/var/lib/mysql
+    networks:
+      - microservices-network
+    restart: always
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  notes-service:
+    build: ./microservices/notes-service
+    container_name: notes-service
+    ports:
+      - "7074:7074"
+    environment:
+      - CONFIG_SERVER_URL=http://config-server:7777
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:7777
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://notes-db:3306/notes_db
+      - SPRING_DATASOURCE_USERNAME=notes
+      - SPRING_DATASOURCE_PASSWORD=notes
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+      notes-db:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    restart: always
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7074/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
 networks:
   microservices-network:
     driver: bridge
@@ -266,3 +317,4 @@ volumes:
   etudiant_db_data:
   scolarite_db_data:
   enseignant_db_data:
+  notes_db_data:

@@ -2,6 +2,7 @@ package sn.uasz.m2info.etudiant_service.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,19 +20,21 @@ import sn.uasz.m2info.etudiant_service.dtos.InscriptionResponseDto;
 import sn.uasz.m2info.etudiant_service.services.InscriptionService;
 
 @RestController
-@RequestMapping("/inscriptions")
+@RequestMapping("/api/inscriptions")
 @RequiredArgsConstructor
 public class InscriptionController {
 
     private final InscriptionService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
     public InscriptionResponseDto inscrire(
             @Valid @RequestBody InscriptionRequestDto dto) {
         return service.inscrire(dto.getEtudiantId(), dto.getClasseId());
     }
 
     @PutMapping("/{id}/etat")
+    @PreAuthorize("hasRole('ADMIN')")
     public InscriptionResponseDto changerEtat(
             @PathVariable Long id,
             @Valid @RequestBody ChangerEtatInscriptionDto dto) {
@@ -39,16 +42,19 @@ public class InscriptionController {
     }
 
     @GetMapping("/classe/{classeId}")
+    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
     public List<InscriptionResponseDto> getByClasse(@PathVariable Long classeId) {
         return service.getByClasse(classeId);
     }
 
     @GetMapping("/etudiant/{etudiantId}")
+    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
     public List<InscriptionResponseDto> getDossierEtudiant(@PathVariable Long etudiantId) {
         return service.getDossierEtudiant(etudiantId);
     }
 
     @GetMapping("/classe/{classeId}/etudiants")
+    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getEtudiantsByClasse(@PathVariable Long classeId) {
         return service.getEtudiantsByClasse(classeId);
     }

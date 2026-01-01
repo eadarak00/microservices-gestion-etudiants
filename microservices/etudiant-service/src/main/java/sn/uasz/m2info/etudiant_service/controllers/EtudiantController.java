@@ -2,6 +2,7 @@ package sn.uasz.m2info.etudiant_service.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,19 +19,21 @@ import sn.uasz.m2info.etudiant_service.dtos.EtudiantResponseDto;
 import sn.uasz.m2info.etudiant_service.services.EtudiantService;
 
 @RestController
-@RequestMapping("/etudiants")
+@RequestMapping("/api/etudiants")
 @RequiredArgsConstructor
 public class EtudiantController {
 
     private final EtudiantService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
     public EtudiantResponseDto creer(
             @Valid @RequestBody EtudiantRequestDto dto) {
         return service.creer(dto);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN','ETUDIANT')")
     public EtudiantResponseDto modifier(
             @PathVariable Long id,
             @Valid @RequestBody EtudiantRequestDto dto) {
@@ -38,6 +41,7 @@ public class EtudiantController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void supprimer(@PathVariable Long id) {
         service.supprimer(id);
     }
@@ -53,6 +57,7 @@ public class EtudiantController {
     }
 
     @GetMapping("/classe/{classeId}")
+    @PreAuthorize("hasRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getByClasse(@PathVariable Long classeId) {
         return service.getByClasse(classeId);
     }

@@ -1,4 +1,4 @@
-package sn.uasz.m2info.auth.security;
+package sn.uasz.m2Info.gateway_server.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +25,6 @@ public class SecurityConfig {
                                                                 "/actuator/**",
                                                                 "/api/auth/users")
                                                 .permitAll()
-
                                                 .anyRequest().authenticated())
                                 .oauth2ResourceServer(oauth2 -> oauth2
                                                 .jwt(jwt -> jwt

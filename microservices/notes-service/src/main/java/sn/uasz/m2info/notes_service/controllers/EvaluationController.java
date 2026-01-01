@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class EvaluationController {
     private final EvaluationService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<EvaluationResponseDto> create(
             @RequestBody EvaluationRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -32,16 +34,19 @@ public class EvaluationController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<EvaluationResponseDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<List<EvaluationResponseDto>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ENSEIGNANT')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

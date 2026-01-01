@@ -2,6 +2,7 @@ package sn.uasz.m2info.scolarite_service.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,13 +15,14 @@ import sn.uasz.m2info.scolarite_service.entities.ClasseMatiere;
 import sn.uasz.m2info.scolarite_service.services.ClasseMatiereService;
 
 @RestController
-@RequestMapping("/classe-matieres")
+@RequestMapping("/api/classe-matieres")
 @RequiredArgsConstructor
 public class ClasseMatiereController {
 
     private final ClasseMatiereService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ClasseMatiere affecter(
             @RequestParam Long classeId,
             @RequestParam Long matiereId,

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import sn.uasz.m2info.etudiant_service.dtos.ClasseResponseDto;
 
-@FeignClient(name = "scolarite-service", path = "/classes", fallback = ScolariteClientFallback.class)
+@FeignClient(name = "scolarite-service", path = "/api/classes", fallback = ScolariteClientFallback.class)
 public interface ScolariteClient {
 
     @GetMapping("/{id}/exists")
