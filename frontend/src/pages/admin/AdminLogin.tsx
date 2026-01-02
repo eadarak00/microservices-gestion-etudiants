@@ -2,7 +2,53 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAdmin } from "../../services/auth.service";
 import { saveTokens } from "../../services/token.service";
-import { Shield, User, Lock, ArrowRight, Sparkles } from "lucide-react";
+import { Shield, User, Lock, ArrowRight, Sparkles, Loader2 } from "lucide-react";
+
+// Fonction pour décoder le token JWT
+const decodeJWT = (token: string) => {
+  try {
+    // Le token JWT est composé de 3 parties séparées par des points : header.payload.signature
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Erreur lors du décodage du token:", error);
+    return null;
+  }
+};
+
+// Fonction pour vérifier si l'utilisateur a le rôle ADMIN
+const hasAdminRole = (decodedToken: any): boolean => {
+  if (!decodedToken) return false;
+
+  // Vérifier dans realm_access.roles
+  if (decodedToken.realm_access && decodedToken.realm_access.roles) {
+    return decodedToken.realm_access.roles.includes("ADMIN");
+  }
+
+  // Vérifier dans resource_access si nécessaire
+  if (decodedToken.resource_access) {
+    for (const resource in decodedToken.resource_access) {
+      const roles = decodedToken.resource_access[resource]?.roles || [];
+      if (roles.includes("ADMIN")) {
+        return true;
+      }
+    }
+  }
+
+  // Vérifier directement dans les claims
+  if (decodedToken.roles && Array.isArray(decodedToken.roles)) {
+    return decodedToken.roles.includes("ADMIN");
+  }
+
+  return false;
+};
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -13,7 +59,6 @@ const AdminLogin = () => {
   const [focus, setFocus] = useState<"username" | "password" | null>(null);
   const isDisabled = !username.trim() || !password.trim();
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -23,16 +68,51 @@ const AdminLogin = () => {
       const response = await loginAdmin(username, password);
       console.log("LOGIN RESPONSE", response);
 
+      // Décoder le token pour vérifier le rôle
+      const decodedToken = decodeJWT(response.accessToken);
+      console.log("Token décodé:", decodedToken);
+
+      if (!decodedToken) {
+        throw new Error("Token invalide");
+      }
+
+      // Vérifier si l'utilisateur a le rôle ADMIN
+      const isAdmin = hasAdminRole(decodedToken);
+      console.log("Utilisateur est ADMIN:", isAdmin);
+
+      if (!isAdmin) {
+        throw new Error("Accès réservé aux administrateurs");
+      }
+
+      // Sauvegarder les tokens
       saveTokens(response.accessToken, response.refreshToken);
+
+      // Rediriger vers la page admin
       navigate("/admin");
+
     } catch (err: any) {
       console.error("LOGIN ERROR", err?.response || err);
-      setError("Identifiants invalides");
+
+      // Gérer différents types d'erreurs
+      if (err.message === "Accès réservé aux administrateurs") {
+        setError("Accès refusé : rôle ADMIN requis");
+      } else if (err.message === "Token invalide") {
+        setError("Erreur d'authentification : token invalide");
+      } else if (err.response?.status === 401) {
+        setError("Identifiants invalides");
+      } else if (err.response?.status === 403) {
+        setError("Accès non autorisé");
+      } else if (err.response?.status === 404) {
+        setError("Service d'authentification indisponible");
+      } else if (err.response?.status >= 500) {
+        setError("Erreur serveur. Veuillez réessayer plus tard.");
+      } else {
+        setError("Une erreur est survenue. Veuillez réessayer.");
+      }
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div
@@ -76,18 +156,25 @@ const AdminLogin = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary-gradient mb-2">
-            Bienvenue
+            Connexion Admin
           </h1>
           <p className="text-[var(--color-text-muted)]">
-            Accès sécurisé administrateur
+            Accès sécurisé réservé aux administrateurs
           </p>
         </div>
 
         {/* Error */}
         {error && (
-          <p className="text-center text-sm text-red-500 mt-4">
-            {error}
-          </p>
+          <div className="mb-4 p-3 rounded-lg text-center text-sm transition-all animate-in fade-in duration-300"
+            style={{
+              background: "rgba(239, 68, 68, 0.1)",
+              color: "var(--color-error)",
+              border: "1px solid var(--color-error)"
+            }}
+          >
+            <div className="font-semibold mb-1">Erreur d'authentification</div>
+            <div>{error}</div>
+          </div>
         )}
 
         {/* Form */}
@@ -110,11 +197,13 @@ const AdminLogin = () => {
               onChange={(e) => setUsername(e.target.value)}
               onFocus={() => setFocus("username")}
               onBlur={() => setFocus(null)}
-              className="w-full py-3 pl-12 pr-4 rounded-xl bg-transparent transition-all"
+              className="w-full py-3 pl-12 pr-4 rounded-xl bg-transparent transition-all focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-30"
               style={{
                 border: "1px solid var(--color-neutral-300)",
                 outline: "none",
               }}
+              disabled={loading}
+              autoComplete="username"
             />
           </div>
 
@@ -136,48 +225,59 @@ const AdminLogin = () => {
               onChange={(e) => setPassword(e.target.value)}
               onFocus={() => setFocus("password")}
               onBlur={() => setFocus(null)}
-              className="w-full py-3 pl-12 pr-4 rounded-xl bg-transparent transition-all"
+              className="w-full py-3 pl-12 pr-4 rounded-xl bg-transparent transition-all focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-opacity-30"
               style={{
                 border: "1px solid var(--color-neutral-300)",
                 outline: "none",
               }}
+              disabled={loading}
+              autoComplete="current-password"
             />
           </div>
 
-          {/* Forgot */}
-          <div className="text-right">
-            <button
-              type="button"
-              className="text-sm transition-colors"
-              style={{ color: "var(--color-text-light)" }}
-            >
-              Mot de passe oublié ?
-            </button>
-          </div>
-
-          {/* Submit */}
+          {/* Submit Button with Loader */}
           <button
             type="submit"
             disabled={isDisabled || loading}
-            className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all
-                ${isDisabled ? "cursor-not-allowed opacity-50" : "hover-lift"}
+            className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all relative overflow-hidden
+                ${(isDisabled || loading) ? "cursor-not-allowed" : "hover-lift"}
               `}
             style={{
-              background: "var(--gradient-primary)",
-              color: "var(--color-text-on-primary)",
-              boxShadow: isDisabled ? "none" : "var(--shadow-lg)",
+              background: isDisabled
+                ? "var(--color-neutral-200)"
+                : "var(--gradient-primary)",
+              color: isDisabled
+                ? "var(--color-text-muted)"
+                : "var(--color-text-on-primary)",
+              boxShadow: (isDisabled || loading) ? "none" : "var(--shadow-lg)",
             }}
           >
-            Se connecter
-            <ArrowRight className="w-5 h-5" />
-          </button>
+            {/* Loader Overlay */}
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-primary)]">
+                <Loader2 className="w-5 h-5 animate-spin text-white" />
+              </div>
+            )}
 
+            {/* Button Content */}
+            <span className={`transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"}`}>
+              {loading ? "Vérification..." : "Se connecter"}
+            </span>
+            {!loading && <ArrowRight className="w-5 h-5 transition-opacity duration-300" />}
+          </button>
         </form>
 
-        {/* Footer */}
-        <p className="mt-8 text-center text-sm text-[var(--color-text-light)]">
-          Accès réservé aux administrateurs
-        </p>
+        {/* Security Info */}
+        <div className="mt-6 p-3 rounded-lg text-xs text-center"
+          style={{
+            background: "rgba(var(--color-primary-rgb), 0.05)",
+            color: "var(--color-text-muted)",
+            border: "1px solid rgba(var(--color-primary-rgb), 0.1)"
+          }}
+        >
+          <Lock className="w-3 h-3 inline-block mr-1" />
+          Connexion sécurisée avec vérification des privilèges administrateur
+        </div>
       </div>
     </div>
   );
