@@ -4,52 +4,6 @@ import { loginAdmin } from "../../services/auth.service";
 import { saveTokens } from "../../services/token.service";
 import { Shield, User, Lock, ArrowRight, Sparkles, Loader2 } from "lucide-react";
 
-// Fonction pour décoder le token JWT
-const decodeJWT = (token: string) => {
-  try {
-    // Le token JWT est composé de 3 parties séparées par des points : header.payload.signature
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    );
-    return JSON.parse(jsonPayload);
-  } catch (error) {
-    console.error("Erreur lors du décodage du token:", error);
-    return null;
-  }
-};
-
-// Fonction pour vérifier si l'utilisateur a le rôle ADMIN
-const hasAdminRole = (decodedToken: any): boolean => {
-  if (!decodedToken) return false;
-
-  // Vérifier dans realm_access.roles
-  if (decodedToken.realm_access && decodedToken.realm_access.roles) {
-    return decodedToken.realm_access.roles.includes("ADMIN");
-  }
-
-  // Vérifier dans resource_access si nécessaire
-  if (decodedToken.resource_access) {
-    for (const resource in decodedToken.resource_access) {
-      const roles = decodedToken.resource_access[resource]?.roles || [];
-      if (roles.includes("ADMIN")) {
-        return true;
-      }
-    }
-  }
-
-  // Vérifier directement dans les claims
-  if (decodedToken.roles && Array.isArray(decodedToken.roles)) {
-    return decodedToken.roles.includes("ADMIN");
-  }
-
-  return false;
-};
-
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
@@ -68,47 +22,11 @@ const AdminLogin = () => {
       const response = await loginAdmin(username, password);
       console.log("LOGIN RESPONSE", response);
 
-      // Décoder le token pour vérifier le rôle
-      const decodedToken = decodeJWT(response.accessToken);
-      console.log("Token décodé:", decodedToken);
-
-      if (!decodedToken) {
-        throw new Error("Token invalide");
-      }
-
-      // Vérifier si l'utilisateur a le rôle ADMIN
-      const isAdmin = hasAdminRole(decodedToken);
-      console.log("Utilisateur est ADMIN:", isAdmin);
-
-      if (!isAdmin) {
-        throw new Error("Accès réservé aux administrateurs");
-      }
-
-      // Sauvegarder les tokens
       saveTokens(response.accessToken, response.refreshToken);
-
-      // Rediriger vers la page admin
       navigate("/admin");
-
     } catch (err: any) {
       console.error("LOGIN ERROR", err?.response || err);
-
-      // Gérer différents types d'erreurs
-      if (err.message === "Accès réservé aux administrateurs") {
-        setError("Accès refusé : rôle ADMIN requis");
-      } else if (err.message === "Token invalide") {
-        setError("Erreur d'authentification : token invalide");
-      } else if (err.response?.status === 401) {
-        setError("Identifiants invalides");
-      } else if (err.response?.status === 403) {
-        setError("Accès non autorisé");
-      } else if (err.response?.status === 404) {
-        setError("Service d'authentification indisponible");
-      } else if (err.response?.status >= 500) {
-        setError("Erreur serveur. Veuillez réessayer plus tard.");
-      } else {
-        setError("Une erreur est survenue. Veuillez réessayer.");
-      }
+      setError("Identifiants invalides");
     } finally {
       setLoading(false);
     }
@@ -156,10 +74,10 @@ const AdminLogin = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary-gradient mb-2">
-            Connexion Admin
+            Bienvenue
           </h1>
           <p className="text-[var(--color-text-muted)]">
-            Accès sécurisé réservé aux administrateurs
+            Accès sécurisé administrateur
           </p>
         </div>
 
@@ -172,8 +90,7 @@ const AdminLogin = () => {
               border: "1px solid var(--color-error)"
             }}
           >
-            <div className="font-semibold mb-1">Erreur d'authentification</div>
-            <div>{error}</div>
+            {error}
           </div>
         )}
 
@@ -203,7 +120,6 @@ const AdminLogin = () => {
                 outline: "none",
               }}
               disabled={loading}
-              autoComplete="username"
             />
           </div>
 
@@ -231,7 +147,6 @@ const AdminLogin = () => {
                 outline: "none",
               }}
               disabled={loading}
-              autoComplete="current-password"
             />
           </div>
 
@@ -261,23 +176,16 @@ const AdminLogin = () => {
 
             {/* Button Content */}
             <span className={`transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"}`}>
-              {loading ? "Vérification..." : "Se connecter"}
+              Se connecter
             </span>
-            {!loading && <ArrowRight className="w-5 h-5 transition-opacity duration-300" />}
+            <ArrowRight className={`w-5 h-5 transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"}`} />
           </button>
         </form>
 
-        {/* Security Info */}
-        <div className="mt-6 p-3 rounded-lg text-xs text-center"
-          style={{
-            background: "rgba(var(--color-primary-rgb), 0.05)",
-            color: "var(--color-text-muted)",
-            border: "1px solid rgba(var(--color-primary-rgb), 0.1)"
-          }}
-        >
-          <Lock className="w-3 h-3 inline-block mr-1" />
-          Connexion sécurisée avec vérification des privilèges administrateur
-        </div>
+        {/* Footer */}
+        <p className="mt-8 text-center text-sm text-[var(--color-text-light)]">
+          Accès réservé aux administrateurs
+        </p>
       </div>
     </div>
   );
