@@ -20,7 +20,10 @@ api.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
 
-    if (token) {
+    const isPublicRoute =
+      config.url?.includes("/auth/admin/login");
+
+    if (token && !isPublicRoute) {
       config.headers.Authorization = `Bearer ${token}`;
     }
 

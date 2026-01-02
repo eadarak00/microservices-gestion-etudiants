@@ -21,9 +21,12 @@ const AdminLogin = () => {
 
     try {
       const response = await loginAdmin(username, password);
+      console.log("LOGIN RESPONSE", response);
+
       saveTokens(response.accessToken, response.refreshToken);
       navigate("/admin");
-    } catch (err) {
+    } catch (err: any) {
+      console.error("LOGIN ERROR", err?.response || err);
       setError("Identifiants invalides");
     } finally {
       setLoading(false);
