@@ -4,6 +4,8 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import Etudiants from "../pages/admin/Etudiants";
 import Classes from "../pages/admin/Classes";
+import ProtectedAdminRoute from "./ProtectedAdminRoute";
+
 
 const AppRouter = () => {
   return (
@@ -14,12 +16,18 @@ const AppRouter = () => {
         <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* Routes Admin avec layout */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedAdminRoute>
+              <AdminLayout />
+            </ProtectedAdminRoute>
+          }
+        >
           <Route index element={<AdminDashboard />} />
           <Route path="etudiants" element={<Etudiants />} />
           <Route path="classes" element={<Classes />} />
         </Route>
-
       </Routes>
     </BrowserRouter>
   );

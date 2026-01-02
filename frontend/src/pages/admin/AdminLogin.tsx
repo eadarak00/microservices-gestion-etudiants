@@ -1,17 +1,35 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginAdmin } from "../../services/auth.service";
+import { saveTokens } from "../../services/token.service";
 import { Shield, User, Lock, ArrowRight, Sparkles } from "lucide-react";
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [focus, setFocus] = useState<"username" | "password" | null>(null);
   const isDisabled = !username.trim() || !password.trim();
 
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ username, password });
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await loginAdmin(username, password);
+      saveTokens(response.accessToken, response.refreshToken);
+      navigate("/admin");
+    } catch (err) {
+      setError("Identifiants invalides");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <div
@@ -61,6 +79,13 @@ const AdminLogin = () => {
             Accès sécurisé administrateur
           </p>
         </div>
+
+        {/* Error */}
+        {error && (
+          <p className="text-center text-sm text-red-500 mt-4">
+            {error}
+          </p>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -130,10 +155,10 @@ const AdminLogin = () => {
           {/* Submit */}
           <button
             type="submit"
-            disabled={isDisabled}
+            disabled={isDisabled || loading}
             className={`w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all
-    ${isDisabled ? "cursor-not-allowed opacity-50" : "hover-lift"}
-  `}
+                ${isDisabled ? "cursor-not-allowed opacity-50" : "hover-lift"}
+              `}
             style={{
               background: "var(--gradient-primary)",
               color: "var(--color-text-on-primary)",
