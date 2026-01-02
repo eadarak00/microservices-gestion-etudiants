@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+:root {
+  /* Couleurs principales */
+  --color-primary: #2563eb;     /* Bleu principal (admin) */
+  --color-primary-hover: #1d4ed8;
+
+  --color-secondary: #64748b;   /* Gris/bleu */
+  --color-accent: #0ea5e9;      /* Accent */
+
+  /* Backgrounds */
+  --color-bg-main: #f8fafc;
+  --color-bg-sidebar: #1e3a8a;
+  --color-bg-card: #ffffff;
+
+  /* Texte */
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  --color-text-invert: #ffffff;
+
+  /* États */
+  --color-success: #22c55e;
+  --color-warning: #facc15;
+  --color-danger: #ef4444;
+
+  /* Police */
+  --font-primary: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}

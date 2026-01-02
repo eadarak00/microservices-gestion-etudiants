@@ -1,0 +1,10 @@
+@import "./theme.css";
+
+@import "tailwindcss";
+
+/* Appliquer la police globale */
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+}

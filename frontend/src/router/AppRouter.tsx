@@ -1,0 +1,28 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AdminLayout from "../layouts/admin/AdminLayout";
+import AdminLogin from "../pages/admin/AdminLogin";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import Etudiants from "../pages/admin/Etudiants";
+import Classes from "../pages/admin/Classes";
+
+const AppRouter = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+
+        {/* Login Admin (sans layout) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        {/* Routes Admin avec layout */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="etudiants" element={<Etudiants />} />
+          <Route path="classes" element={<Classes />} />
+        </Route>
+
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default AppRouter;
