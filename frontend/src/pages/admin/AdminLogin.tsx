@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginAdmin } from "../../services/auth.service";
-import { saveTokens } from "../../services/token.service";
+import { saveTokens, hasAdminRole, clearTokens } from "../../services/token.service";
 import { Shield, User, Lock, ArrowRight, Sparkles, Loader2 } from "lucide-react";
 
 const AdminLogin = () => {
@@ -23,6 +23,11 @@ const AdminLogin = () => {
       console.log("LOGIN RESPONSE", response);
 
       saveTokens(response.accessToken, response.refreshToken);
+      if (!hasAdminRole()) {
+        clearTokens();
+        setError("Accès refusé : rôle administrateur requis");
+        return;
+      }
       navigate("/admin");
     } catch (err: any) {
       console.error("LOGIN ERROR", err?.response || err);
