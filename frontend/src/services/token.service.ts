@@ -1,9 +1,21 @@
+import { jwtDecode } from "jwt-decode";
+
 /**
  * Clés de stockage
  * (scopées Admin)
  */
 const ACCESS_TOKEN_KEY = "admin_access_token";
 const REFRESH_TOKEN_KEY = "admin_refresh_token";
+
+/**
+ * Interface du token décodé (Keycloak)
+ */
+interface DecodedToken {
+  exp?: number;
+  realm_access?: {
+    roles: string[];
+  };
+}
 
 /**
  * Sauvegarder les tokens
@@ -19,13 +31,11 @@ export const saveTokens = (
 /**
  * Récupérer les tokens
  */
-export const getAccessToken = (): string | null => {
-  return localStorage.getItem(ACCESS_TOKEN_KEY);
-};
+export const getAccessToken = (): string | null =>
+  localStorage.getItem(ACCESS_TOKEN_KEY);
 
-export const getRefreshToken = (): string | null => {
-  return localStorage.getItem(REFRESH_TOKEN_KEY);
-};
+export const getRefreshToken = (): string | null =>
+  localStorage.getItem(REFRESH_TOKEN_KEY);
 
 /**
  * Supprimer les tokens (logout)
@@ -36,8 +46,48 @@ export const clearTokens = () => {
 };
 
 /**
- * Vérifier si l'admin est connecté
+ * Décoder le token JWT
+ */
+export const decodeToken = (): DecodedToken | null => {
+  const token = getAccessToken();
+  if (!token) return null;
+
+  try {
+    return jwtDecode<DecodedToken>(token);
+  } catch (error) {
+    console.error("JWT decode error", error);
+    return null;
+  }
+};
+
+/**
+ * Vérifier si le token est expiré
+ */
+export const isTokenExpired = (): boolean => {
+  const decoded = decodeToken();
+  if (!decoded?.exp) return true;
+
+  return decoded.exp * 1000 < Date.now();
+};
+
+/**
+ * Vérifier si l'utilisateur a le rôle ADMIN
+ */
+export const hasAdminRole = (): boolean => {
+  const decoded = decodeToken();
+  return (
+    decoded?.realm_access?.roles?.includes("ADMIN") ?? false
+  );
+};
+
+
+/**
+ * Vérifier si l'admin est authentifié (token valide + rôle ADMIN)
  */
 export const isAuthenticated = (): boolean => {
-  return !!getAccessToken();
+  return (
+    !!getAccessToken() &&
+    !isTokenExpired() &&
+    hasAdminRole()
+  );
 };
