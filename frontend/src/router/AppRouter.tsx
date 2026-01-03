@@ -5,6 +5,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import Etudiants from "../pages/admin/Etudiants";
 import Classes from "../pages/admin/Classes";
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
+import Matieres from "../pages/admin/Matieres";
 
 
 const AppRouter = () => {
@@ -27,6 +28,7 @@ const AppRouter = () => {
           <Route index element={<AdminDashboard />} />
           <Route path="etudiants" element={<Etudiants />} />
           <Route path="classes" element={<Classes />} />
+          <Route path="matieres" element={<Matieres />} />
         </Route>
       </Routes>
     </BrowserRouter>
