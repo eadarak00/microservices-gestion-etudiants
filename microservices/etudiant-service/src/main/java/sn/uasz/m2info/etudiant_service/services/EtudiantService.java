@@ -102,4 +102,11 @@ public class EtudiantService {
                 .map(i -> EtudiantMapper.toDto(i.getEtudiant()))
                 .toList();
     }
+
+    public List<EtudiantResponseDto> getAll() {
+        return repo.findAll()
+                .stream()
+                .map(EtudiantMapper::toDto)
+                .toList();
+    }
 }

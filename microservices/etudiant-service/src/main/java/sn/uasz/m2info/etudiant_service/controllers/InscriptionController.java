@@ -33,6 +33,12 @@ public class InscriptionController {
         return service.inscrire(dto.getEtudiantId(), dto.getClasseId());
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<InscriptionResponseDto> getAll() {
+        return service.getAll();
+    }
+
     @PutMapping("/{id}/etat")
     @PreAuthorize("hasRole('ADMIN')")
     public InscriptionResponseDto changerEtat(

@@ -98,4 +98,11 @@ public class InscriptionService {
                 .map(i -> EtudiantMapper.toDto(i.getEtudiant()))
                 .toList();
     }
+
+    public List<InscriptionResponseDto> getAll() {
+        return inscriptionRepo.findAll()
+                .stream()
+                .map(InscriptionMapper::toDto)
+                .toList();
+    }
 }

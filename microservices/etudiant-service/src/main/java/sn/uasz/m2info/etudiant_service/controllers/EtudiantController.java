@@ -32,6 +32,12 @@ public class EtudiantController {
         return service.creer(dto);
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<EtudiantResponseDto> getAll() {
+        return service.getAll();
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public EtudiantResponseDto modifier(
