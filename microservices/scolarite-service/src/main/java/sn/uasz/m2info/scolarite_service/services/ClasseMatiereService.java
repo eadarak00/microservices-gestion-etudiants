@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import sn.uasz.m2info.scolarite_service.dtos.ClasseMatiereDTO;
+import sn.uasz.m2info.scolarite_service.dtos.MatiereResponseDto;
 import sn.uasz.m2info.scolarite_service.entities.Classe;
 import sn.uasz.m2info.scolarite_service.entities.ClasseMatiere;
 import sn.uasz.m2info.scolarite_service.entities.Matiere;
@@ -36,7 +38,17 @@ public class ClasseMatiereService {
         return repo.save(cm);
     }
 
-    public List<ClasseMatiere> matieresParClasse(Long classeId) {
-        return repo.findByClasseId(classeId);
+    public List<ClasseMatiereDTO> matieresParClasse(Long classeId) {
+
+        return repo.findByClasseId(classeId)
+                .stream()
+                .map(cm -> new ClasseMatiereDTO(
+                        cm.getMatiere().getId(),
+                        cm.getMatiere().getCode(),
+                        cm.getMatiere().getLibelle(),
+                        cm.getMatiere().getCoefficient(),
+                        cm.getVolumeHoraire()
+                ))
+                .toList();
     }
 }

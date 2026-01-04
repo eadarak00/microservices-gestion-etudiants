@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import sn.uasz.m2info.scolarite_service.dtos.ClasseMatiereDTO;
 import sn.uasz.m2info.scolarite_service.entities.ClasseMatiere;
 import sn.uasz.m2info.scolarite_service.services.ClasseMatiereService;
 
@@ -32,7 +33,7 @@ public class ClasseMatiereController {
     }
 
     @GetMapping("/classe/{classeId}")
-    public List<ClasseMatiere> parClasse(@PathVariable Long classeId) {
+    public List<ClasseMatiereDTO> parClasse(@PathVariable Long classeId) {
         return service.matieresParClasse(classeId);
     }
 }

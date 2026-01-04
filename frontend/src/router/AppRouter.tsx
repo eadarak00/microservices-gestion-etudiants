@@ -6,6 +6,7 @@ import Etudiants from "../pages/admin/Etudiants";
 import Classes from "../pages/admin/Classes";
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import Matieres from "../pages/admin/Matieres";
+import ClasseDetail from "../pages/admin/ClasseDetails";
 
 
 const AppRouter = () => {
@@ -29,6 +30,7 @@ const AppRouter = () => {
           <Route path="etudiants" element={<Etudiants />} />
           <Route path="classes" element={<Classes />} />
           <Route path="matieres" element={<Matieres />} />
+          <Route path="/admin/classes/:id" element={<ClasseDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>
