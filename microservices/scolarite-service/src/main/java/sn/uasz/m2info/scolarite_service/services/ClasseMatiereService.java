@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import sn.uasz.m2info.scolarite_service.dtos.ClasseMatiereDTO;
-import sn.uasz.m2info.scolarite_service.dtos.MatiereResponseDto;
 import sn.uasz.m2info.scolarite_service.entities.Classe;
 import sn.uasz.m2info.scolarite_service.entities.ClasseMatiere;
 import sn.uasz.m2info.scolarite_service.entities.Matiere;
@@ -22,8 +21,8 @@ public class ClasseMatiereService {
     private final ClasseRepository classeRepo;
     private final MatiereRepository matiereRepo;
 
-    public ClasseMatiere affecter(Long classeId, Long matiereId, Integer vh) {
 
+    public ClasseMatiere affecter(Long classeId, Long matiereId, Integer vh) {
         Classe c = classeRepo.findById(classeId)
                 .orElseThrow(() -> new RuntimeException("Classe introuvable"));
 
@@ -38,23 +37,37 @@ public class ClasseMatiereService {
         return repo.save(cm);
     }
 
-    public List<ClasseMatiereDTO> matieresParClasse(Long classeId) {
+    public ClasseMatiere modifier(Long classeId, Long matiereId, Integer vh) {
 
-    // Vérifier l'existence de la classe
-    if (!classeRepo.existsById(classeId)) {
-        throw new RuntimeException("Classe introuvable");
+        ClasseMatiere cm = repo.findByClasseIdAndMatiereId(classeId, matiereId)
+                .orElseThrow(() -> new RuntimeException("Affectation introuvable"));
+
+        cm.setVolumeHoraire(vh);
+        return repo.save(cm);
     }
 
-    return repo.findByClasseId(classeId)
-            .stream()
-            .map(cm -> new ClasseMatiereDTO(
-                    cm.getMatiere().getId(),
-                    cm.getMatiere().getCode(),
-                    cm.getMatiere().getLibelle(),
-                    cm.getMatiere().getCoefficient(),
-                    cm.getVolumeHoraire()
-            ))
-            .toList(); // retourne [] si vide
-}
+    public void supprimer(Long classeId, Long matiereId) {
 
+        ClasseMatiere cm = repo.findByClasseIdAndMatiereId(classeId, matiereId)
+                .orElseThrow(() -> new RuntimeException("Affectation introuvable"));
+
+        repo.delete(cm);
+    }
+
+    public List<ClasseMatiereDTO> matieresParClasse(Long classeId) {
+
+        if (!classeRepo.existsById(classeId)) {
+            throw new RuntimeException("Classe introuvable");
+        }
+
+        return repo.findByClasseId(classeId)
+                .stream()
+                .map(cm -> new ClasseMatiereDTO(
+                        cm.getMatiere().getId(),
+                        cm.getMatiere().getCode(),
+                        cm.getMatiere().getLibelle(),
+                        cm.getMatiere().getCoefficient(),
+                        cm.getVolumeHoraire()))
+                .toList();
+    }
 }
