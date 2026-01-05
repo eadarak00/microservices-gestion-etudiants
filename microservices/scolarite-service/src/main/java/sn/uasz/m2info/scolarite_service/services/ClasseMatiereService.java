@@ -40,15 +40,21 @@ public class ClasseMatiereService {
 
     public List<ClasseMatiereDTO> matieresParClasse(Long classeId) {
 
-        return repo.findByClasseId(classeId)
-                .stream()
-                .map(cm -> new ClasseMatiereDTO(
-                        cm.getMatiere().getId(),
-                        cm.getMatiere().getCode(),
-                        cm.getMatiere().getLibelle(),
-                        cm.getMatiere().getCoefficient(),
-                        cm.getVolumeHoraire()
-                ))
-                .toList();
+    // Vérifier l'existence de la classe
+    if (!classeRepo.existsById(classeId)) {
+        throw new RuntimeException("Classe introuvable");
     }
+
+    return repo.findByClasseId(classeId)
+            .stream()
+            .map(cm -> new ClasseMatiereDTO(
+                    cm.getMatiere().getId(),
+                    cm.getMatiere().getCode(),
+                    cm.getMatiere().getLibelle(),
+                    cm.getMatiere().getCoefficient(),
+                    cm.getVolumeHoraire()
+            ))
+            .toList(); // retourne [] si vide
+}
+
 }

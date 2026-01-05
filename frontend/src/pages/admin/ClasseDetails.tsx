@@ -25,11 +25,11 @@ const ClasseDetail = () => {
   const [classe, setClasse] = useState<Classe | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [matieresAffectees, setMatieresAffectees] =
-    useState<ClasseMatiereDTO[]>([]);
+  const [matieresAffectees, setMatieresAffectees] = useState<
+    ClasseMatiereDTO[]
+  >([]);
 
-  const [matieresDisponibles, setMatieresDisponibles] =
-    useState<Matiere[]>([]);
+  const [matieresDisponibles, setMatieresDisponibles] = useState<Matiere[]>([]);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -61,16 +61,12 @@ const ClasseDetail = () => {
   /* =========================
       FETCH MATIÈRES DISPONIBLES
   ========================== */
-  const fetchMatieresDisponibles = async (
-    affectees: ClasseMatiereDTO[]
-  ) => {
+  const fetchMatieresDisponibles = async (affectees: ClasseMatiereDTO[]) => {
     try {
       const res = await getMatieres();
       const affecteesIds = affectees.map((m) => m.matiereId);
 
-      const disponibles = res.data.filter(
-        (m) => !affecteesIds.includes(m.id)
-      );
+      const disponibles = res.data.filter((m) => !affecteesIds.includes(m.id));
 
       setMatieresDisponibles(disponibles);
     } catch {
@@ -89,10 +85,26 @@ const ClasseDetail = () => {
 
     const load = async () => {
       setLoading(true);
+
       await fetchClasse();
-      const res = await getMatieresParClasse(classeId);
-      setMatieresAffectees(res.data);
-      await fetchMatieresDisponibles(res.data);
+
+      let affectees: ClasseMatiereDTO[] = [];
+
+      try {
+        const res = await getMatieresParClasse(classeId);
+        affectees = res.data;
+      } catch (e: any) {
+        if (e.response?.status === 404) {
+          // ✅ Cas normal : aucune matière affectée
+          affectees = [];
+        } else {
+          toast.error("Erreur lors du chargement des matières affectées");
+        }
+      }
+
+      setMatieresAffectees(affectees);
+      await fetchMatieresDisponibles(affectees);
+
       setLoading(false);
     };
 
@@ -172,16 +184,24 @@ const ClasseDetail = () => {
         </thead>
 
         <tbody>
-          {matieresAffectees.map((ma) => (
-            <tr key={ma.matiereId}>
-              <td>{ma.code}</td>
-              <td>{ma.libelle}</td>
-              <td>{ma.coefficient}</td>
-              <td>
-                <Clock size={14} /> {ma.volumeHoraire} h
+          {matieresAffectees.length === 0 ? (
+            <tr>
+              <td colSpan={4} className="text-center py-4 text-gray-500">
+                Aucune matière affectée à cette classe
               </td>
             </tr>
-          ))}
+          ) : (
+            matieresAffectees.map((ma) => (
+              <tr key={ma.matiereId}>
+                <td>{ma.code}</td>
+                <td>{ma.libelle}</td>
+                <td>{ma.coefficient}</td>
+                <td className="flex items-center gap-1">
+                  <Clock size={14} /> {ma.volumeHoraire} h
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
 
