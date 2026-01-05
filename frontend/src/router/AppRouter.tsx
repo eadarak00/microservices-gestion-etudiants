@@ -7,6 +7,7 @@ import Classes from "../pages/admin/Classes";
 import ProtectedAdminRoute from "./ProtectedAdminRoute";
 import Matieres from "../pages/admin/Matieres";
 import ClasseDetail from "../pages/admin/ClasseDetails";
+import Enseignants from "../pages/admin/Enseignants";
 
 
 const AppRouter = () => {
@@ -31,6 +32,7 @@ const AppRouter = () => {
           <Route path="classes" element={<Classes />} />
           <Route path="matieres" element={<Matieres />} />
           <Route path="/admin/classes/:id" element={<ClasseDetail />} />
+          <Route path="/admin/enseignants" element={<Enseignants />} />
         </Route>
       </Routes>
     </BrowserRouter>
