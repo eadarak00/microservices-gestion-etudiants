@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import sn.uasz.m2info.notes_service.dtos.EtudiantDto;
 
-@FeignClient(name = "etudiant-service", path = "/api/etudiants", fallback = EtudiantClientFallback.class)
+@FeignClient(name = "etudiant-service", path = "/api/internal/etudiants", fallback = EtudiantClientFallback.class)
 public interface EtudiantClient {
 
     @GetMapping("/{id}")

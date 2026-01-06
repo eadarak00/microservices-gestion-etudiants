@@ -7,7 +7,9 @@ public class AffectationResponseDto {
 
     private Long id;
     private Long classeId;
+    private String libelleClase;
     private Long matiereId;
+    private String libelleMatiere;
 
     private Long enseignantId;
     private String enseignantNom;

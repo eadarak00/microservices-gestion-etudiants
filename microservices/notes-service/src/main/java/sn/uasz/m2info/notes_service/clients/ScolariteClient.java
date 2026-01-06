@@ -12,12 +12,12 @@ import sn.uasz.m2info.notes_service.dtos.MatiereDto;
 @FeignClient(name = "scolarite-service", fallback = ScolariteClientFallback.class)
 public interface ScolariteClient {
 
-    @GetMapping("/api/classes/{id}")
+    @GetMapping("/internal/classes/{id}")
     ClasseDto getClasse(@PathVariable Long id);
 
-    @GetMapping("/api/classes/{idClasse}/etudiants")
+    @GetMapping("/internal/classes/{idClasse}/etudiants")
     List<EtudiantDto> getEtudiantsByClasse(@PathVariable Long idClasse);
 
-    @GetMapping("/api/matieres/{id}")
+    @GetMapping("/internal/matieres/{id}")
     MatiereDto getMatiere(@PathVariable Long id);
 }
