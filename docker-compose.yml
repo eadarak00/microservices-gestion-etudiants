@@ -89,7 +89,7 @@ services:
       - microservices-network
     restart: always
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:7070/actuator/health"]
+      test: [ "CMD", "wget", "--spider", "-q", "http://localhost:7070/actuator/health" ]
       interval: 10s
       timeout: 5s
       retries: 10

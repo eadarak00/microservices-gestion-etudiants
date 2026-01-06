@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import sn.uasz.m2info.enseignant_service.clients.ScolariteClient;
 import sn.uasz.m2info.enseignant_service.dtos.AffectationRequestDto;
 import sn.uasz.m2info.enseignant_service.dtos.AffectationResponseDto;
+import sn.uasz.m2info.enseignant_service.dtos.AffectationUpdateDto;
 import sn.uasz.m2info.enseignant_service.dtos.ClasseDto;
 import sn.uasz.m2info.enseignant_service.dtos.MatiereDto;
 import sn.uasz.m2info.enseignant_service.entities.Affectation;
@@ -29,36 +30,32 @@ public class AffectationService {
     private final EnseignantRepository enseignantRepo;
     private final ScolariteClient scolariteClient;
 
-    //create affectation
+    // create affectation
     @CircuitBreaker(name = "scolarite-service", fallbackMethod = "affecterFallback")
     public AffectationResponseDto affecter(AffectationRequestDto dto) {
 
         // Vérifier enseignant
         Enseignant enseignant = enseignantRepo.findById(dto.getEnseignantId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Enseignant introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Enseignant introuvable"));
 
         // Vérifier classe (ms-scolarite)
         ClasseDto classe = scolariteClient.getClasse(dto.getClasseId());
         if (classe.getId() == null) {
             throw new IllegalStateException(
-                    "Classe inexistante ou service scolarité indisponible"
-            );
+                    "Classe inexistante ou service scolarité indisponible");
         }
 
         // Vérifier matière (ms-scolarite)
         MatiereDto matiere = scolariteClient.getMatiere(dto.getMatiereId());
         if (matiere.getId() == null) {
             throw new IllegalStateException(
-                    "Matière inexistante ou service scolarité indisponible"
-            );
+                    "Matière inexistante ou service scolarité indisponible");
         }
 
-        //  Vérifier unicité classe + matière
+        // Vérifier unicité classe + matière
         if (repo.existsByClasseIdAndMatiereId(dto.getClasseId(), dto.getMatiereId())) {
             throw new IllegalStateException(
-                    "Cette matière est déjà affectée à cette classe"
-            );
+                    "Cette matière est déjà affectée à cette classe");
         }
 
         // 5Création affectation
@@ -87,4 +84,29 @@ public class AffectationService {
     public AffectationResponseDto affecterFallback(AffectationRequestDto dto, Throwable t) {
         throw new ServiceUnavailableException("Le service scolarité est indisponible.");
     }
+
+    public void supprimer(Long id) {
+        Affectation affectation = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Affectation introuvable"));
+
+        repo.delete(affectation);
+    }
+
+    @Transactional
+    public AffectationResponseDto modifier(Long id, AffectationUpdateDto dto) {
+
+        Affectation affectation = repo.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Affectation introuvable"));
+
+        Enseignant enseignant = enseignantRepo.findById(dto.getEnseignantId())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Enseignant introuvable"));
+
+        affectation.setEnseignant(enseignant);
+
+        return AffectationMapper.toDto(repo.save(affectation));
+    }
+
+
 }

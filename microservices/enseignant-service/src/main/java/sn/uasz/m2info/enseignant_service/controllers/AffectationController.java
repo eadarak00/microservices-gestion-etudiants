@@ -3,9 +3,11 @@ package sn.uasz.m2info.enseignant_service.controllers;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +16,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import sn.uasz.m2info.enseignant_service.dtos.AffectationRequestDto;
 import sn.uasz.m2info.enseignant_service.dtos.AffectationResponseDto;
+import sn.uasz.m2info.enseignant_service.dtos.AffectationUpdateDto;
 import sn.uasz.m2info.enseignant_service.services.AffectationService;
 
 @RestController
@@ -52,4 +55,19 @@ public class AffectationController {
             @PathVariable Long enseignantId) {
         return service.getByEnseignant(enseignantId);
     }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public AffectationResponseDto modifier(
+            @PathVariable Long id,
+            @Valid @RequestBody AffectationUpdateDto dto) {
+        return service.modifier(id, dto);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void supprimer(@PathVariable Long id) {
+        service.supprimer(id);
+    }
+
 }
