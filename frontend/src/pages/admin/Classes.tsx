@@ -8,7 +8,7 @@ import {
   deleteClasse,
 } from "../../services/classe.service";
 import type { Classe, ClasseCreate, ClasseUpdate } from "../../types/classe";
-import ClasseModal from "../../components/ClasseModal";
+import ClasseModal from "../../components/admin/ClasseModal";
 import { useNavigate } from "react-router-dom";
 
 const Classes = () => {

@@ -18,7 +18,7 @@ import {
 import { toast } from "react-hot-toast";
 import { getMatieres, createMatiere, updateMatiere, deleteMatiere } from "../../services/matiere.service";
 import type { Matiere, MatiereCreate, MatiereUpdate } from "../../types/matiere";
-import MatiereModal from "../../components/MatiereModal";
+import MatiereModal from "../../components/admin/MatiereModal";
 
 const Matieres = () => {
   const [matieres, setMatieres] = useState<Matiere[]>([]);

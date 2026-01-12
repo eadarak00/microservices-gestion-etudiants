@@ -21,7 +21,7 @@ import {
   supprimerEnseignant,
 } from "../../services/enseignant.service";
 
-import EnseignantModal from "../../components/EnseignantModal";
+import EnseignantModal from "../../components/admin/EnseignantModal";
 import type { Enseignant } from "../../types/enseignant";
 import { useNavigate } from "react-router-dom";
 

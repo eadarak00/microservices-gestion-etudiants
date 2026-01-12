@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { X, Users, BookOpen, Link, Loader2, ChevronDown, CheckCircle, GraduationCap } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-import { getClasses } from "../services/classe.service";
-import { getMatieresParClasse } from "../services/classe-matiere.service";
-import { affecterEnseignant } from "../services/affectation.service";
+import { getClasses } from "../../services/classe.service";
+import { getMatieresParClasse } from "../../services/classe-matiere.service";
+import { affecterEnseignant } from "../../services/affectation.service";
 
-import type { Classe } from "../types/classe";
-import type { ClasseMatiereDTO } from "../types/classe-matiere";
+import type { Classe } from "../../types/classe";
+import type { ClasseMatiereDTO } from "../../types/classe-matiere";
 
 interface Props {
   open: boolean;

@@ -5,8 +5,8 @@ import { X, UserPlus, UserCog, Eye, EyeOff } from "lucide-react";
 import {
   creerEnseignant,
   modifierEnseignant,
-} from "../services/enseignant.service";
-import type { Enseignant, EnseignantCreate } from "../types/enseignant";
+} from "../../services/enseignant.service";
+import type { Enseignant, EnseignantCreate } from "../../types/enseignant";
 
 interface Props {
   open: boolean;

@@ -1,6 +1,6 @@
 import { X, Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
-import type { EtudiantCreate, EtudiantUpdate } from "../types/etudiant";
+import type { EtudiantCreate, EtudiantUpdate } from "../../types/etudiant";
 import { Input } from "./Input";
 
 interface EtudiantModalProps {

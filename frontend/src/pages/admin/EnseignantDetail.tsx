@@ -26,7 +26,7 @@ import {
 
 import type { Enseignant } from "../../types/enseignant";
 import type { AffectationResponseDto } from "../../types/affectation";
-import AffectationModal from "../../components/Affectation";
+import AffectationModal from "../../components/admin/Affectation";
 import { getClasseById } from "../../services/classe.service";
 import { getMatiereById } from "../../services/matiere.service";
 

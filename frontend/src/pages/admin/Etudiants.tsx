@@ -8,7 +8,7 @@ import {
   deleteEtudiant,
 } from "../../services/etudiant.service";
 import type { Etudiant, EtudiantCreate, EtudiantUpdate } from "../../types/etudiant";
-import EtudiantModal from "../../components/EtudiantModal";
+import EtudiantModal from "../../components/admin/EtudiantModal";
 
 const Etudiants = () => {
   const [etudiants, setEtudiants] = useState<Etudiant[]>([]);

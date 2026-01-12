@@ -13,7 +13,7 @@ import type { Matiere } from "../../types/matiere";
 import type { ClasseMatiereDTO } from "../../types/classe-matiere";
 import type { AffectationResponseDto } from "../../types/affectation";
 
-import AffectationMatiereModal from "../../components/AffectationMatiereModal";
+import AffectationMatiereModal from "../../components/admin/AffectationMatiereModal";
 
 const ClasseDetail = () => {
   const { id } = useParams();

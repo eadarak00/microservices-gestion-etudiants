@@ -1,6 +1,6 @@
 import { X } from "lucide-react";
 import { useState } from "react";
-import type { Matiere } from "../types/matiere";
+import type { Matiere } from "../../types/matiere";
 
 interface Props {
   open: boolean;
