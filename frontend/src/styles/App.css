@@ -1,42 +1,95 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* Styles pour le Hero Section amélioré */
+.text-gradient-animated {
+  background: linear-gradient(
+    90deg, 
+    var(--color-primary), 
+    var(--color-primary-light), 
+    var(--color-secondary), 
+    var(--color-primary)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 8s ease infinite;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.text-gradient-animated:hover {
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Effets de verre (glassmorphism) adaptés au thème */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-effect-dark {
+  background: rgba(96, 6, 34, 0.1); /* var(--color-primary) avec transparence */
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(96, 6, 34, 0.2);
+}
+
+/* Animation de pulse subtile avec couleurs du thème */
+@keyframes subtle-pulse {
+  0%, 100% { 
+    opacity: 0.1; 
+    box-shadow: 0 0 20px var(--color-primary-light);
   }
-  to {
-    transform: rotate(360deg);
+  50% { 
+    opacity: 0.2; 
+    box-shadow: 0 0 40px var(--color-primary);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@keyframes grid-move {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: 40px 40px;
   }
 }
 
-.card {
-  padding: 2em;
+.animate-grid {
+  animation: grid-move 20s linear infinite;
 }
 
-.read-the-docs {
-  color: #888;
+/* Effet de lueur pour les éléments importants */
+.glow-effect {
+  box-shadow: 0 0 30px rgba(96, 6, 34, 0.3); /* Lueur bordeaux */
+}
+
+.glow-effect-blue {
+  box-shadow: 0 0 30px rgba(42, 92, 138, 0.3); /* Lueur bleu ardoise */
+}
+
+/* Animation de flottement pour les éléments décoratifs */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 10s ease-in-out infinite;
+}
+
+.animate-float-delay {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 2s;
 }

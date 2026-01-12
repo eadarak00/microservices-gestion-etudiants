@@ -9,12 +9,17 @@ import Matieres from "../pages/admin/Matieres";
 import ClasseDetail from "../pages/admin/ClasseDetails";
 import Enseignants from "../pages/admin/Enseignants";
 import EnseignantDetail from "../pages/admin/EnseignantDetail";
+import LandingPage from "../pages/LandingPage";
 
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
+
+        {/* Landing Page */}
+        <Route path="/" element={<LandingPage />} />
+
 
         {/* Login Admin (sans layout) */}
         <Route path="/admin/login" element={<AdminLogin />} />
