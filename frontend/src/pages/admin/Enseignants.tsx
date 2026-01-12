@@ -9,6 +9,10 @@ import {
   Users,
   ChevronDown,
   Eye,
+  GraduationCap,
+  Hash,
+  Mail,
+  Phone,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -29,7 +33,6 @@ const Enseignants = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterSpecialite, setFilterSpecialite] = useState("");
   const navigate = useNavigate();
-
 
   const fetchEnseignants = async () => {
     try {
@@ -90,12 +93,12 @@ const Enseignants = () => {
       >
         <div className="text-center">
           <Loader2
-            className="h-12 w-12 animate-spin mx-auto mb-4"
+            className="h-10 w-10 animate-spin mx-auto mb-3"
             style={{ color: "var(--color-primary)" }}
           />
           <p
-            className="text-lg font-medium"
-            style={{ color: "var(--color-text-main)" }}
+            className="text-sm font-medium"
+            style={{ color: "var(--color-text-main)", fontSize: '14px' }}
           >
             Chargement des enseignants...
           </p>
@@ -106,46 +109,140 @@ const Enseignants = () => {
 
   return (
     <div
-      className="min-h-screen p-6"
-      style={{ background: "var(--color-bg-main)" }}
+      className="min-h-screen p-4 md:p-5"
+      style={{ background: "var(--color-bg-main)", fontFamily: 'var(--font-primary)' }}
     >
       {/* En-tête */}
       <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
+        <div className="mb-6">
+          <div className="flex items-center gap-3 mb-1.5">
             <div
               className="p-2 rounded-lg"
-              style={{ background: "var(--color-bg-alt)" }}
+              style={{ background: "var(--gradient-primary)" }}
             >
-              <Users
-                className="h-6 w-6"
-                style={{ color: "var(--color-primary)" }}
+              <GraduationCap
+                className="h-5 w-5"
+                style={{ color: "var(--color-text-on-primary)" }}
               />
             </div>
-            <h1
-              className="text-3xl font-bold"
-              style={{ color: "var(--color-text-main)" }}
-            >
-              Gestion des Enseignants
-            </h1>
+            <div>
+              <h1
+                className="text-xl font-bold tracking-tight"
+                style={{ color: "var(--color-text-main)", fontSize: '20px' }}
+              >
+                Gestion des Enseignants
+              </h1>
+              <p className="text-xs" style={{ color: "var(--color-text-muted)", fontSize: '12px' }}>
+                Gérez les profils des enseignants de l'institution
+              </p>
+            </div>
           </div>
-          <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>
-            Gérez les informations et les profils des enseignants de
-            l'institution
-          </p>
+        </div>
+
+        {/* Statistiques */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5">
+          <div
+            className="bg-[var(--color-bg-card)] rounded-lg p-4"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p
+                  className="text-xs font-medium mb-1"
+                  style={{ color: "var(--color-text-muted)", fontSize: '11px' }}
+                >
+                  Total enseignants
+                </p>
+                <p
+                  className="text-xl font-bold tracking-tight"
+                  style={{ color: "var(--color-text-main)" }}
+                >
+                  {enseignants.length}
+                </p>
+              </div>
+              <div
+                className="p-2.5 rounded"
+                style={{ background: "var(--color-bg-alt)" }}
+              >
+                <Users
+                  className="h-4.5 w-4.5"
+                  style={{ color: "var(--color-primary)" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="bg-[var(--color-bg-card)] rounded-lg p-4"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p
+                  className="text-xs font-medium mb-1"
+                  style={{ color: "var(--color-text-muted)", fontSize: '11px' }}
+                >
+                  Spécialités
+                </p>
+                <p
+                  className="text-xl font-bold tracking-tight"
+                  style={{ color: "var(--color-text-main)" }}
+                >
+                  {specialites.length}
+                </p>
+              </div>
+              <div
+                className="p-2.5 rounded"
+                style={{ background: "var(--color-success-light)" }}
+              >
+                <Filter
+                  className="h-4.5 w-4.5"
+                  style={{ color: "var(--color-success)" }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="bg-[var(--color-bg-card)] rounded-lg p-4"
+            style={{ boxShadow: "var(--shadow-sm)" }}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p
+                  className="text-xs font-medium mb-1"
+                  style={{ color: "var(--color-text-muted)", fontSize: '11px' }}
+                >
+                  Affichés
+                </p>
+                <p
+                  className="text-xl font-bold tracking-tight"
+                  style={{ color: "var(--color-text-main)" }}
+                >
+                  {filteredEnseignants.length}
+                </p>
+              </div>
+              <div
+                className="p-2.5 rounded"
+                style={{ background: "var(--color-info-light)" }}
+              >
+                <Eye className="h-4.5 w-4.5" style={{ color: "var(--color-info)" }} />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Barre d'actions */}
         <div
-          className="bg-[var(--color-bg-card)] rounded-xl p-6 mb-6"
-          style={{ boxShadow: "var(--shadow-md)" }}
+          className="bg-[var(--color-bg-card)] rounded-lg p-4 mb-5"
+          style={{ boxShadow: "var(--shadow-sm)" }}
         >
-          <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
+          <div className="flex flex-col lg:flex-row gap-3 items-start lg:items-center justify-between">
             {/* Recherche et filtres */}
-            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
-              <div className="relative flex-1 sm:flex-none sm:w-64">
+            <div className="flex flex-col sm:flex-row gap-2.5 w-full lg:w-auto">
+              <div className="relative flex-1 sm:flex-none sm:w-56">
                 <Search
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4"
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5"
                   style={{ color: "var(--color-text-light)" }}
                 />
                 <input
@@ -153,22 +250,24 @@ const Enseignants = () => {
                   placeholder="Rechercher un enseignant..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg border transition-colors"
+                  className="w-full pl-9 pr-3 py-2 rounded-lg border transition-colors text-sm"
                   style={{
                     borderColor: "var(--color-neutral-300)",
                     backgroundColor: "var(--color-neutral-50)",
                     color: "var(--color-text-main)",
+                    fontSize: '14px'
                   }}
                 />
               </div>
 
               <div className="relative">
                 <div
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-lg border cursor-pointer transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors text-sm"
                   style={{
-                    borderColor: "var(--color-neutral-300)",
+                    borderColor: filterSpecialite ? "var(--color-primary)" : "var(--color-neutral-300)",
                     backgroundColor: "var(--color-neutral-50)",
                     color: "var(--color-text-main)",
+                    fontSize: '14px'
                   }}
                   onClick={() =>
                     setFilterSpecialite(
@@ -176,25 +275,25 @@ const Enseignants = () => {
                     )
                   }
                 >
-                  <Filter className="h-4 w-4" />
-                  <span>{filterSpecialite || "Toutes spécialités"}</span>
-                  <ChevronDown className="h-4 w-4 ml-2" />
+                  <Filter className="h-3.5 w-3.5" />
+                  <span className="truncate max-w-[120px]">{filterSpecialite || "Toutes spécialités"}</span>
+                  <ChevronDown className="h-3.5 w-3.5 ml-1" />
                 </div>
                 {filterSpecialite && (
                   <button
                     onClick={() => setFilterSpecialite("")}
-                    className="absolute -top-2 -right-2 bg-[var(--color-danger)] text-white rounded-full p-1"
+                    className="absolute -top-1.5 -right-1.5 bg-[var(--color-danger)] text-white rounded-full p-0.5"
                     style={{
-                      width: "20px",
-                      height: "20px",
+                      width: "16px",
+                      height: "16px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
                     <svg
-                      width="12"
-                      height="12"
+                      width="10"
+                      height="10"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -217,133 +316,41 @@ const Enseignants = () => {
                 setSelected(null);
                 setModalOpen(true);
               }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-all duration-200 hover-lift whitespace-nowrap"
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 hover-lift whitespace-nowrap text-sm"
               style={{
                 background: "var(--gradient-primary)",
                 color: "var(--color-text-on-primary)",
-                boxShadow: "var(--shadow-md)",
+                boxShadow: "var(--shadow-sm)",
+                fontSize: '14px'
               }}
             >
-              <Plus className="h-5 w-5" />
+              <Plus className="h-4 w-4" />
               Nouvel enseignant
             </button>
           </div>
         </div>
 
-        {/* Statistiques */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div
-            className="bg-[var(--color-bg-card)] rounded-xl p-6"
-            style={{ boxShadow: "var(--shadow-sm)" }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p
-                  className="text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  Total enseignants
-                </p>
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: "var(--color-text-main)" }}
-                >
-                  {enseignants.length}
-                </p>
-              </div>
-              <div
-                className="p-3 rounded-lg"
-                style={{ background: "var(--color-bg-alt)" }}
-              >
-                <Users
-                  className="h-6 w-6"
-                  style={{ color: "var(--color-primary)" }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="bg-[var(--color-bg-card)] rounded-xl p-6"
-            style={{ boxShadow: "var(--shadow-sm)" }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p
-                  className="text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  Spécialités
-                </p>
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: "var(--color-text-main)" }}
-                >
-                  {specialites.length}
-                </p>
-              </div>
-              <div
-                className="p-3 rounded-lg"
-                style={{ background: "var(--color-success-light)" }}
-              >
-                <Filter
-                  className="h-6 w-6"
-                  style={{ color: "var(--color-success)" }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div
-            className="bg-[var(--color-bg-card)] rounded-xl p-6"
-            style={{ boxShadow: "var(--shadow-sm)" }}
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p
-                  className="text-sm font-medium mb-1"
-                  style={{ color: "var(--color-text-muted)" }}
-                >
-                  Affichés
-                </p>
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: "var(--color-text-main)" }}
-                >
-                  {filteredEnseignants.length}
-                </p>
-              </div>
-              <div
-                className="p-3 rounded-lg"
-                style={{ background: "var(--color-info-light)" }}
-              >
-                <Eye className="h-6 w-6" />
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Tableau des enseignants */}
         <div
-          className="bg-[var(--color-bg-card)] rounded-xl overflow-hidden"
-          style={{ boxShadow: "var(--shadow-md)" }}
+          className="bg-[var(--color-bg-card)] rounded-lg overflow-hidden"
+          style={{ boxShadow: "var(--shadow-sm)" }}
         >
           {/* En-tête du tableau */}
           <div
-            className="p-4 border-b"
+            className="p-3 border-b"
             style={{ borderColor: "var(--color-neutral-200)" }}
           >
             <div className="flex items-center justify-between">
               <div>
                 <h2
-                  className="text-lg font-semibold"
-                  style={{ color: "var(--color-text-main)" }}
+                  className="text-base font-semibold"
+                  style={{ color: "var(--color-text-main)", fontSize: '15px' }}
                 >
                   Liste des enseignants
                 </h2>
                 <p
-                  className="text-sm"
-                  style={{ color: "var(--color-text-muted)" }}
+                  className="text-xs"
+                  style={{ color: "var(--color-text-muted)", fontSize: '12px' }}
                 >
                   {filteredEnseignants.length} enseignant
                   {filteredEnseignants.length !== 1 ? "s" : ""} trouvé
@@ -359,34 +366,35 @@ const Enseignants = () => {
               <thead>
                 <tr style={{ background: "var(--color-bg-alt)" }}>
                   <th
-                    className="py-3 px-6 text-left font-medium text-sm uppercase tracking-wider"
-                    style={{ color: "var(--color-text-main)" }}
+                    className="py-2.5 px-4 text-left font-medium text-xs uppercase tracking-wider"
+                    style={{ color: "var(--color-text-main)", fontSize: '11px', letterSpacing: '0.05em' }}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <Hash className="h-3.5 w-3.5" />
                       <span>Matricule</span>
                     </div>
                   </th>
                   <th
-                    className="py-3 px-6 text-left font-medium text-sm uppercase tracking-wider"
-                    style={{ color: "var(--color-text-main)" }}
+                    className="py-2.5 px-4 text-left font-medium text-xs uppercase tracking-wider"
+                    style={{ color: "var(--color-text-main)", fontSize: '11px', letterSpacing: '0.05em' }}
                   >
                     Enseignant
                   </th>
                   <th
-                    className="py-3 px-6 text-left font-medium text-sm uppercase tracking-wider"
-                    style={{ color: "var(--color-text-main)" }}
+                    className="py-2.5 px-4 text-left font-medium text-xs uppercase tracking-wider"
+                    style={{ color: "var(--color-text-main)", fontSize: '11px', letterSpacing: '0.05em' }}
                   >
                     Contact
                   </th>
                   <th
-                    className="py-3 px-6 text-left font-medium text-sm uppercase tracking-wider"
-                    style={{ color: "var(--color-text-main)" }}
+                    className="py-2.5 px-4 text-left font-medium text-xs uppercase tracking-wider"
+                    style={{ color: "var(--color-text-main)", fontSize: '11px', letterSpacing: '0.05em' }}
                   >
                     Spécialité
                   </th>
                   <th
-                    className="py-3 px-6 text-left font-medium text-sm uppercase tracking-wider"
-                    style={{ color: "var(--color-text-main)" }}
+                    className="py-2.5 px-4 text-left font-medium text-xs uppercase tracking-wider"
+                    style={{ color: "var(--color-text-main)", fontSize: '11px', letterSpacing: '0.05em' }}
                   >
                     Actions
                   </th>
@@ -395,24 +403,24 @@ const Enseignants = () => {
               <tbody>
                 {filteredEnseignants.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-12 text-center">
+                    <td colSpan={5} className="py-8 text-center">
                       <Users
-                        className="h-12 w-12 mx-auto mb-4"
+                        className="h-10 w-10 mx-auto mb-3"
                         style={{ color: "var(--color-neutral-300)" }}
                       />
                       <p
-                        className="text-lg font-medium mb-2"
-                        style={{ color: "var(--color-text-main)" }}
+                        className="text-sm font-medium mb-1"
+                        style={{ color: "var(--color-text-main)", fontSize: '14px' }}
                       >
                         Aucun enseignant trouvé
                       </p>
                       <p
-                        className="text-sm"
-                        style={{ color: "var(--color-text-muted)" }}
+                        className="text-xs max-w-md mx-auto"
+                        style={{ color: "var(--color-text-muted)", fontSize: '12px' }}
                       >
                         {searchTerm || filterSpecialite
-                          ? "Essayez de modifier vos critères de recherche"
-                          : "Commencez par ajouter un nouvel enseignant"}
+                          ? "Modifiez vos critères de recherche"
+                          : "Ajoutez un nouvel enseignant pour commencer"}
                       </p>
                     </td>
                   </tr>
@@ -423,25 +431,34 @@ const Enseignants = () => {
                       className="border-b transition-colors hover:bg-[var(--color-bg-alt)]"
                       style={{ borderColor: "var(--color-neutral-200)" }}
                     >
-                      <td className="py-4 px-6">
-                        <div
-                          className="font-medium"
-                          style={{ color: "var(--color-text-main)" }}
-                        >
-                          {enseignant.matricule}
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="p-1.5 rounded"
+                            style={{ background: "var(--color-neutral-100)" }}
+                          >
+                            <Hash className="h-3.5 w-3.5" style={{ color: "var(--color-primary)" }} />
+                          </div>
+                          <div
+                            className="font-medium text-sm"
+                            style={{ color: "var(--color-text-main)", fontSize: '14px' }}
+                          >
+                            {enseignant.matricule}
+                          </div>
                         </div>
                       </td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-3">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-2.5">
                           <div className="flex-shrink-0">
                             <div
-                              className="h-10 w-10 rounded-full flex items-center justify-center"
+                              className="h-9 w-9 rounded-full flex items-center justify-center"
                               style={{ background: "var(--gradient-primary)" }}
                             >
                               <span
-                                className="text-sm font-medium"
+                                className="text-xs font-medium"
                                 style={{
                                   color: "var(--color-text-on-primary)",
+                                  fontSize: '12px'
                                 }}
                               >
                                 {enseignant.prenom[0]}
@@ -449,46 +466,53 @@ const Enseignants = () => {
                               </span>
                             </div>
                           </div>
-                          <div>
+                          <div className="min-w-0">
                             <div
-                              className="font-medium"
-                              style={{ color: "var(--color-text-main)" }}
+                              className="font-medium text-sm truncate"
+                              style={{ color: "var(--color-text-main)", fontSize: '14px' }}
                             >
                               {enseignant.prenom} {enseignant.nom}
                             </div>
-                            <div
-                              className="text-sm"
-                              style={{ color: "var(--color-text-muted)" }}
-                            >
-                              {enseignant.telephone}
+                            <div className="flex items-center gap-1.5 mt-0.5">
+                              <Phone className="h-3 w-3" style={{ color: "var(--color-text-light)" }} />
+                              <div
+                                className="text-xs truncate"
+                                style={{ color: "var(--color-text-muted)", fontSize: '12px' }}
+                              >
+                                {enseignant.telephone || "Non renseigné"}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="py-4 px-6">
-                        <div style={{ color: "var(--color-text-main)" }}>
-                          {enseignant.email}
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-1.5">
+                          <Mail className="h-3.5 w-3.5" style={{ color: "var(--color-text-light)" }} />
+                          <div className="text-sm truncate" style={{ color: "var(--color-text-main)", fontSize: '14px' }}>
+                            {enseignant.email}
+                          </div>
                         </div>
                       </td>
-                      <td className="py-4 px-6">
+                      <td className="py-3 px-4">
                         <span
-                          className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                          className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium"
                           style={{
                             background: "var(--color-bg-alt)",
                             color: "var(--color-primary)",
+                            fontSize: '12px'
                           }}
                         >
                           {enseignant.specialite}
                         </span>
                       </td>
-                      <td className="py-4 px-6">
-                        <div className="flex items-center gap-2">
+                      <td className="py-3 px-4">
+                        <div className="flex items-center gap-1">
                           {/* Bouton Voir détails */}
                           <button
                             onClick={() =>
                               navigate(`/admin/enseignants/${enseignant.id}`)
                             }
-                            className="p-2 rounded-lg transition-all duration-200 hover-lift"
+                            className="p-1.5 rounded transition-all duration-200 hover-lift hover:shadow-xs"
                             style={{
                               background: "var(--color-neutral-100)",
                               color: "var(--color-primary)",
@@ -496,7 +520,7 @@ const Enseignants = () => {
                             aria-label="Voir détails"
                             title="Voir le profil détaillé"
                           >
-                            <Eye className="h-4 w-4" />
+                            <Eye className="h-3.5 w-3.5" />
                           </button>
 
                           {/* Bouton Modifier */}
@@ -505,7 +529,7 @@ const Enseignants = () => {
                               setSelected(enseignant);
                               setModalOpen(true);
                             }}
-                            className="p-2 rounded-lg transition-all duration-200 hover-lift"
+                            className="p-1.5 rounded transition-all duration-200 hover-lift hover:shadow-xs"
                             style={{
                               background: "var(--color-neutral-100)",
                               color: "var(--color-secondary)",
@@ -513,13 +537,13 @@ const Enseignants = () => {
                             aria-label="Modifier"
                             title="Modifier l'enseignant"
                           >
-                            <Pencil className="h-4 w-4" />
+                            <Pencil className="h-3.5 w-3.5" />
                           </button>
 
                           {/* Bouton Supprimer */}
                           <button
                             onClick={() => handleDelete(enseignant.id)}
-                            className="p-2 rounded-lg transition-all duration-200 hover-lift"
+                            className="p-1.5 rounded transition-all duration-200 hover-lift hover:shadow-xs"
                             style={{
                               background: "var(--color-danger-light)",
                               color: "var(--color-danger)",
@@ -527,7 +551,7 @@ const Enseignants = () => {
                             aria-label="Supprimer"
                             title="Supprimer l'enseignant"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3.5 w-3.5" />
                           </button>
                         </div>
                       </td>
