@@ -136,7 +136,7 @@ const HeroSection = () => {
           className="flex flex-wrap gap-6 justify-center mb-16"
         >
           <button
-            onClick={() => navigate("/admin/login")}
+            onClick={() => navigate("/etudiant/login")}
             className="group px-8 py-4 rounded-xl bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary-light)] text-white shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center gap-3 hover:scale-105 hover-lift"
           >
             <div className="relative">
@@ -147,7 +147,7 @@ const HeroSection = () => {
                 transition={{ duration: 1.5, repeat: Infinity }}
               />
             </div>
-            <span className="font-semibold text-lg">Accès Administrateur</span>
+            <span className="font-semibold text-lg">Accès Etudiant</span>
             <ChevronRight className="group-hover:translate-x-1 transition-transform" size={20} />
           </button>
 

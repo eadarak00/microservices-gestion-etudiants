@@ -252,7 +252,7 @@ const RolesSection = () => {
                   <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                   {/* Badge de rôle */}
-                  <div className="absolute top-0 right-6 px-4 py-1.5 rounded-full text-xs font-semibold text-white shadow-lg"
+                  <div className="absolute top-1 right-6 px-4 py-1.5 rounded-full text-xs font-semibold text-white shadow-lg"
                     style={{ background: role.gradient }}
                   >
                     {role.stats}
