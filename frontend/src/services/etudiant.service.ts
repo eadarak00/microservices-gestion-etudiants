@@ -36,3 +36,10 @@ export const updateEtudiant = (id: number, data: EtudiantUpdate) =>
  */
 export const deleteEtudiant = (id: number) =>
   api.delete<void>(`${API_URL}/${id}`);
+
+/** 
+ * Récupérer un étudiant par email
+*/
+export const getEtudiantParEmail = ( email : string) =>
+  api.get<Etudiant>(`${API_URL}/email/${email}`);
+
