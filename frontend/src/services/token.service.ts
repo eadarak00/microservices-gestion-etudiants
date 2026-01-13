@@ -15,6 +15,7 @@ interface DecodedToken {
   realm_access?: {
     roles: string[];
   };
+  name?: string;
 }
 
 /**
@@ -90,6 +91,12 @@ export const hasStudentRole = (): boolean => {
   );
 };
 
+
+// recupere le nom 
+export const getStudentName = (): string => {
+  const decoded = decodeToken();
+  return decoded?.name || "Étudiant";
+};
 
 
 /**

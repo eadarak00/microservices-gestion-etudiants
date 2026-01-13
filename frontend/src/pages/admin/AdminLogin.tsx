@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginAdmin } from "../../services/auth.service";
+import { login } from "../../services/auth.service";
 import { saveTokens, hasAdminRole, clearTokens } from "../../services/token.service";
 import { Shield, User, Lock, ArrowRight, Sparkles, Loader2 } from "lucide-react";
 import { notification } from "antd";
@@ -28,7 +28,7 @@ const AdminLogin = () => {
     setLoading(true);
 
     try {
-      const response = await loginAdmin(username, password);
+      const response = await login(username, password);
       console.log("LOGIN RESPONSE", response);
 
       const accessToken = response.access_token;

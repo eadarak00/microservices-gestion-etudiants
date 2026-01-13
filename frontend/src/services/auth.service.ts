@@ -5,7 +5,7 @@ export interface LoginResponse {
   refresh_token: string;
 }
 
-export const loginAdmin = async (
+export const login = async (
   username: string,
   password: string
 ): Promise<LoginResponse> => {
