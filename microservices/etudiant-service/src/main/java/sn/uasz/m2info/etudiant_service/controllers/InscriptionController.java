@@ -55,8 +55,14 @@ public class InscriptionController {
 
     @GetMapping("/etudiant/{etudiantId}")
     @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
-    public List<InscriptionResponseDto> getDossierEtudiant(@PathVariable Long etudiantId) {
-        return service.getDossierEtudiant(etudiantId);
+    public List<InscriptionResponseDto> getInscriptionsEtudiant(@PathVariable Long etudiantId) {
+        return service.getInscriptionsEtudiant(etudiantId);
+    }
+
+    @GetMapping("/etudiant/{etudiantId}/dossier-inscription")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
+    public InscriptionResponseDto getDossierEtudiant(@PathVariable Long etudiantId) {
+        return service.getDossierInscription(etudiantId);
     }
 
     @GetMapping("/classe/{classeId}/etudiants")

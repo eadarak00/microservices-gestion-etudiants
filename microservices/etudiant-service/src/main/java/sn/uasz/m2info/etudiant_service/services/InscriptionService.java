@@ -43,14 +43,24 @@ public class InscriptionService {
         Etudiant etudiant = etudiantRepo.findById(etudiantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Étudiant introuvable"));
 
-        // Vérifier inscription existante
+        // Vérifier inscription existante dans la même classe
         inscriptionRepo.findByEtudiantIdAndClasseId(etudiantId, classeId)
                 .ifPresent(i -> {
                     throw new IllegalStateException(
                             "Étudiant déjà inscrit dans cette classe");
                 });
 
-        // =Créer inscription
+        // Ajouter la nouvelle vérification : vérifier si l'étudiant a déjà une
+        // inscription TERMINE
+        boolean hasTerminatedInscription = inscriptionRepo.existsByEtudiantIdAndEtat(
+                etudiantId, EtatInscription.TERMINE);
+
+        if (hasTerminatedInscription) {
+            throw new IllegalStateException(
+                    "L'étudiant a déjà une inscription terminée et ne peut pas s'inscrire à nouveau");
+        }
+
+        // Créer inscription
         Inscription inscription = new Inscription();
         inscription.setEtudiant(etudiant);
         inscription.setClasseId(classeId);
@@ -59,6 +69,34 @@ public class InscriptionService {
 
         return InscriptionMapper.toDto(inscriptionRepo.save(inscription));
     }
+    // public InscriptionResponseDto inscrire(Long etudiantId, Long classeId) {
+
+    // // Vérifier classe
+    // boolean exists = scolariteClient.classeExists(classeId);
+    // if (!exists) {
+    // throw new ResourceNotFoundException("Classe introuvable");
+    // }
+
+    // // Vérifier étudiant
+    // Etudiant etudiant = etudiantRepo.findById(etudiantId)
+    // .orElseThrow(() -> new ResourceNotFoundException("Étudiant introuvable"));
+
+    // // Vérifier inscription existante
+    // inscriptionRepo.findByEtudiantIdAndClasseId(etudiantId, classeId)
+    // .ifPresent(i -> {
+    // throw new IllegalStateException(
+    // "Étudiant déjà inscrit dans cette classe");
+    // });
+
+    // // =Créer inscription
+    // Inscription inscription = new Inscription();
+    // inscription.setEtudiant(etudiant);
+    // inscription.setClasseId(classeId);
+    // inscription.setDateInscription(LocalDate.now());
+    // inscription.setEtat(EtatInscription.ACTIF);
+
+    // return InscriptionMapper.toDto(inscriptionRepo.save(inscription));
+    // }
 
     // Fallback
     public InscriptionResponseDto classeFallback(
@@ -85,20 +123,35 @@ public class InscriptionService {
                 .toList();
     }
 
-    public List<InscriptionResponseDto> getDossierEtudiant(Long etudiantId) {
+    public List<InscriptionResponseDto> getInscriptionsEtudiant(Long etudiantId) {
         return inscriptionRepo.findByEtudiantId(etudiantId)
                 .stream()
                 .map(InscriptionMapper::toDto)
                 .toList();
     }
 
-    public List<EtudiantResponseDto> getEtudiantsByClasse(Long classeId) {
-        return inscriptionRepo.findByClasseId(classeId)
+    public InscriptionResponseDto getDossierInscription(Long etudiantId) {
+        // Vérifier si l'étudiant existe
+        if (!etudiantRepo.existsById(etudiantId)) {
+            throw new ResourceNotFoundException("Étudiant introuvable");
+        }
+
+        // Chercher l'inscription TERMINE (s'il n'y en a qu'une)
+        return inscriptionRepo.findByEtudiantIdAndEtat(etudiantId, EtatInscription.TERMINE)
                 .stream()
-                .map(i -> EtudiantMapper.toDto(i.getEtudiant()))
-                .toList();
+                .findFirst() // Prend la première inscription TERMINE
+                .map(InscriptionMapper::toDto)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Aucune inscription terminée trouvée pour cet étudiant"));
     }
 
+    public List<EtudiantResponseDto> getEtudiantsByClasse(Long classeId) {
+    return inscriptionRepo.findByClasseIdAndEtat(classeId, EtatInscription.TERMINE)
+            .stream()
+            .map(i -> EtudiantMapper.toDto(i.getEtudiant()))
+            .distinct() // Pour éviter les doublons si un étudiant a plusieurs inscriptions TERMINE
+            .toList();
+}
     public List<InscriptionResponseDto> getAll() {
         return inscriptionRepo.findAll()
                 .stream()
