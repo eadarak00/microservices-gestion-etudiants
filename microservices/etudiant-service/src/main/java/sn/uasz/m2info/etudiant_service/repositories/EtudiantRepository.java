@@ -12,6 +12,7 @@ import sn.uasz.m2info.etudiant_service.entities.Etudiant;
 public interface EtudiantRepository extends JpaRepository<Etudiant, Long> {
 
     Optional<Etudiant> findByMatricule(String matricule);
+    Optional<Etudiant> findByEmail(String email);
 
     List<Etudiant> findByIdIn(List<Long> ids);
 }

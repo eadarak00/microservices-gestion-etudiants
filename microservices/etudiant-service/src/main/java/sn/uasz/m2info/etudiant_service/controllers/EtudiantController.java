@@ -62,6 +62,11 @@ public class EtudiantController {
         return service.getByMatricule(matricule);
     }
 
+    @GetMapping("/email/{email}")
+    public EtudiantResponseDto getByEmail(@PathVariable String email) {
+        return service.getByEmail(email);
+    }
+
     @GetMapping("/classe/{classeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")
     public List<EtudiantResponseDto> getByClasse(@PathVariable Long classeId) {

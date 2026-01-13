@@ -109,4 +109,10 @@ public class EtudiantService {
                 .map(EtudiantMapper::toDto)
                 .toList();
     }
+
+    public EtudiantResponseDto getByEmail(String email) {
+        return EtudiantMapper.toDto(
+                repo.findByEmail(email)
+                        .orElseThrow(() -> new ResourceNotFoundException(message)));
+    }
 }
