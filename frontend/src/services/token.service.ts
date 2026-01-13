@@ -80,6 +80,17 @@ export const hasAdminRole = (): boolean => {
   );
 };
 
+/**
+ * Vérifier si l'utilisateur a le rôle ETUDIANT
+ */
+export const hasStudentRole = (): boolean => {
+  const decoded = decodeToken();
+  return (
+    decoded?.realm_access?.roles?.includes("ETUDIANT") ?? false
+  );
+};
+
+
 
 /**
  * Vérifier si l'admin est authentifié (token valide + rôle ADMIN)
@@ -89,5 +100,17 @@ export const isAuthenticated = (): boolean => {
     !!getAccessToken() &&
     !isTokenExpired() &&
     hasAdminRole()
+  );
+};
+
+
+/**
+ * Vérifier si l'admin est authentifié (token valide + rôle ETUDIANT)
+ */
+export const isStudentAuthenticated = (): boolean => {
+  return (
+    !!getAccessToken() &&
+    !isTokenExpired() &&
+    hasStudentRole()
   );
 };
