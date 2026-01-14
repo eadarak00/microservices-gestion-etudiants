@@ -14,6 +14,7 @@ import EtudiantLogin from "../pages/etudiants/LoginEtudiant";
 import StudentProtectedRoute from "./StudentProtectedRoute";
 import StudentLayout from "../layouts/etudiant/StudentLayout";
 import StudentDashboard from "../pages/etudiants/StudentDashboard";
+import InscriptionsPage from "../pages/etudiants/InscriptionPage";
 
 const AppRouter = () => {
   return (
@@ -56,6 +57,7 @@ const AppRouter = () => {
           }
         >
           <Route index element={<StudentDashboard />} />
+          <Route path="inscriptions" element={<InscriptionsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
