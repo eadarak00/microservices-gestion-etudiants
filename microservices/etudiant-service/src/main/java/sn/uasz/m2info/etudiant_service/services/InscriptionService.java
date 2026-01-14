@@ -69,34 +69,6 @@ public class InscriptionService {
 
         return InscriptionMapper.toDto(inscriptionRepo.save(inscription));
     }
-    // public InscriptionResponseDto inscrire(Long etudiantId, Long classeId) {
-
-    // // Vérifier classe
-    // boolean exists = scolariteClient.classeExists(classeId);
-    // if (!exists) {
-    // throw new ResourceNotFoundException("Classe introuvable");
-    // }
-
-    // // Vérifier étudiant
-    // Etudiant etudiant = etudiantRepo.findById(etudiantId)
-    // .orElseThrow(() -> new ResourceNotFoundException("Étudiant introuvable"));
-
-    // // Vérifier inscription existante
-    // inscriptionRepo.findByEtudiantIdAndClasseId(etudiantId, classeId)
-    // .ifPresent(i -> {
-    // throw new IllegalStateException(
-    // "Étudiant déjà inscrit dans cette classe");
-    // });
-
-    // // =Créer inscription
-    // Inscription inscription = new Inscription();
-    // inscription.setEtudiant(etudiant);
-    // inscription.setClasseId(classeId);
-    // inscription.setDateInscription(LocalDate.now());
-    // inscription.setEtat(EtatInscription.ACTIF);
-
-    // return InscriptionMapper.toDto(inscriptionRepo.save(inscription));
-    // }
 
     // Fallback
     public InscriptionResponseDto classeFallback(
@@ -146,16 +118,39 @@ public class InscriptionService {
     }
 
     public List<EtudiantResponseDto> getEtudiantsByClasse(Long classeId) {
-    return inscriptionRepo.findByClasseIdAndEtat(classeId, EtatInscription.TERMINE)
-            .stream()
-            .map(i -> EtudiantMapper.toDto(i.getEtudiant()))
-            .distinct() // Pour éviter les doublons si un étudiant a plusieurs inscriptions TERMINE
-            .toList();
-}
+        return inscriptionRepo.findByClasseIdAndEtat(classeId, EtatInscription.TERMINE)
+                .stream()
+                .map(i -> EtudiantMapper.toDto(i.getEtudiant()))
+                .distinct() // Pour éviter les doublons si un étudiant a plusieurs inscriptions TERMINE
+                .toList();
+    }
+
     public List<InscriptionResponseDto> getAll() {
         return inscriptionRepo.findAll()
                 .stream()
                 .map(InscriptionMapper::toDto)
                 .toList();
     }
+
+    @Transactional
+    public InscriptionResponseDto terminerInscription(Long inscriptionId) {
+
+        Inscription inscription = inscriptionRepo.findById(inscriptionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Inscription introuvable"));
+
+        // 1. Terminer l'inscription choisie
+        inscription.setEtat(EtatInscription.TERMINE);
+        inscriptionRepo.save(inscription);
+
+        // 2. Suspendre toutes les autres inscriptions du même étudiant
+        Long etudiantId = inscription.getEtudiant().getId();
+
+        inscriptionRepo.updateAutresInscriptionsEtat(
+                etudiantId,
+                inscriptionId,
+                EtatInscription.SUSPENDU);
+
+        return InscriptionMapper.toDto(inscription);
+    }
+
 }
