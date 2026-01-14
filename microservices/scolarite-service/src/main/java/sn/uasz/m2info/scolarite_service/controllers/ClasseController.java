@@ -47,13 +47,13 @@ public class ClasseController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public ClasseResponseDto getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
     public List<ClasseResponseDto> getAll() {
         return service.getAll();
     }
