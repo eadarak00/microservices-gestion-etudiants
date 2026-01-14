@@ -17,6 +17,7 @@ import sn.uasz.m2info.etudiant_service.dtos.ChangerEtatInscriptionDto;
 import sn.uasz.m2info.etudiant_service.dtos.EtudiantResponseDto;
 import sn.uasz.m2info.etudiant_service.dtos.InscriptionRequestDto;
 import sn.uasz.m2info.etudiant_service.dtos.InscriptionResponseDto;
+import sn.uasz.m2info.etudiant_service.entities.EtatInscription;
 import sn.uasz.m2info.etudiant_service.services.InscriptionService;
 
 @RestController
@@ -45,6 +46,21 @@ public class InscriptionController {
             @PathVariable Long id,
             @Valid @RequestBody ChangerEtatInscriptionDto dto) {
         return service.changerEtat(id, dto.getEtat());
+    }
+
+
+     @PutMapping("/{id}/accepter")
+    @PreAuthorize("hasRole('ADMIN')")
+    public InscriptionResponseDto terminerInscription(
+            @PathVariable Long id) {
+        return service.terminerInscription(id);
+    }
+
+    @PutMapping("/{id}/annule")
+    @PreAuthorize("hasAnyRole('ADMIN', 'ETUDIANT')")
+    public InscriptionResponseDto annulerInscription(
+            @PathVariable Long id) {
+        return service.changerEtat(id, EtatInscription.ANNULE);
     }
 
     @GetMapping("/classe/{classeId}")
