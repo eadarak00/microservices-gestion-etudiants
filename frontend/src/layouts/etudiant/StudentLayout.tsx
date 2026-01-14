@@ -55,7 +55,7 @@ const StudentLayout = () => {
     { label: "Tableau de bord", icon: LayoutDashboard, path: "/etudiant" },
     { label: "Matieres", icon: BookOpen, path: "/etudiant/matieres" },
     { label: "Notes", icon: BarChart, path: "/etudiant/notes" },
-    { label: "Inscription", icon: FileText, path: "/etudiant/inscription" },
+    { label: "Inscription", icon: FileText, path: "/etudiant/inscriptions" },
     { label: "Classe", icon: Users, path: "/etudiant/classe" },
   ];
 
