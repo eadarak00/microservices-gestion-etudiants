@@ -139,21 +139,11 @@ const StudentDashboard = () => {
     { title: "Devoir Web Development", due: "Dans 5 jours", priority: "medium" },
     { title: "Projet Base de données", due: "Dans 2 semaines", priority: "low" }
   ];
-  const user = getStudentName();
 
   return (
     <div className="space-y-8">
       {/* Header avec statistiques */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <div>
-          <h1 className="text-3xl font-semibold text-[var(--color-text-main)]">
-            Bon retour, {user}
-          </h1>
-          <p className="text-[var(--color-text-muted)] mt-2">
-            Voici un aperçu de votre progression académique
-          </p>
-        </div>
-        
         <div className="flex items-center gap-3">
           <div className="flex bg-white rounded-xl border border-[var(--color-neutral-300)] p-1">
             {["semaine", "mois", "semestre"].map((period) => (
@@ -237,10 +227,6 @@ const StudentDashboard = () => {
                   Planning du jour
                 </h2>
               </div>
-              <button className="text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-primary-light)] transition-colors flex items-center gap-1">
-                Voir l'emploi du temps
-                <ChevronRight className="w-4 h-4" />
-              </button>
             </div>
             
             <div className="space-y-3">
