@@ -4,6 +4,7 @@ import type {
   EtudiantCreate,
   EtudiantUpdate,
 } from "../types/etudiant";
+import { getUserEmail } from "./token.service";
 
 const API_URL = "/etudiants";
 
@@ -43,3 +44,20 @@ export const deleteEtudiant = (id: number) =>
 export const getEtudiantParEmail = ( email : string) =>
   api.get<Etudiant>(`${API_URL}/email/${email}`);
 
+
+/**
+ * Recuperer l'id de d'etudiant
+*/
+export const getStudentId = async (): Promise<number | null> => {
+  const email = getUserEmail();
+
+  if (!email) return null;
+
+  try {
+    const res = await getEtudiantParEmail(email);
+    return res.data.id;
+  } catch (e) {
+    console.error("Erreur récupération étudiant par email", e);
+    return null;
+  }
+};
