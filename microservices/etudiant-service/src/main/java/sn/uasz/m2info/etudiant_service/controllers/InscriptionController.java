@@ -56,12 +56,12 @@ public class InscriptionController {
         return service.terminerInscription(id);
     }
 
-    @PutMapping("/{id}/annule")
-    @PreAuthorize("hasAnyRole('ADMIN', 'ETUDIANT')")
-    public InscriptionResponseDto annulerInscription(
-            @PathVariable Long id) {
-        return service.changerEtat(id, EtatInscription.ANNULE);
+    @PutMapping("/{id}/annuler")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
+    public InscriptionResponseDto annuler(@PathVariable Long id){
+        return service.annulerInscription(id);
     }
+
 
     @GetMapping("/classe/{classeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")

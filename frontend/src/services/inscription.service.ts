@@ -10,3 +10,7 @@ export const createInscription = (data: InscriptionCreate) =>
 
 export const getAllInscriptionEtudiants = (etudiantId : number) => 
     api.get<Inscription[]>(`${BASE_URL}/etudiant/${etudiantId}`)
+
+export const annulerInscription = (id: number) => {
+  return api.put(`${BASE_URL}/${id}/annuler`);
+};

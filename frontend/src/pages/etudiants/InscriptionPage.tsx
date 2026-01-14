@@ -9,18 +9,20 @@ import {
   AlertTriangle,
   Search,
   Filter,
-  Download,
   GraduationCap,
-  ExternalLink,
   RefreshCw,
   Server,
 } from "lucide-react";
 import { getStudentId } from "../../services/etudiant.service";
-import { getAllInscriptionEtudiants } from "../../services/inscription.service";
+import {
+  annulerInscription,
+  getAllInscriptionEtudiants,
+} from "../../services/inscription.service";
 import { getClasseById } from "../../services/classe.service";
 import InscriptionModal from "../../components/etudiants/InscriptionModal";
 import type { Inscription } from "../../types/inscription";
 import type { Classe } from "../../types/classe";
+import toast from "react-hot-toast";
 
 interface ClasseInfo {
   data?: Classe;
@@ -203,6 +205,19 @@ const InscriptionsPage = () => {
     suspendus: inscriptions.filter((i) => i.etat === "SUSPENDU").length,
     annules: inscriptions.filter((i) => i.etat === "ANNULE").length,
     termines: inscriptions.filter((i) => i.etat === "TERMINE").length,
+  };
+
+  const handleAnnuler = async (id: number) => {
+    if (!confirm("Voulez-vous vraiment annuler cette inscription ?")) return;
+
+    try {
+      await annulerInscription(id);
+      toast.success("Inscription annulée avec succès");
+      if (etudiantId) await loadData(etudiantId);
+    } catch (error) {
+      console.error("Erreur lors de l'annulation:", error);
+      toast.error("Impossible d'annuler l'inscription");
+    }
   };
 
   return (
@@ -464,9 +479,19 @@ const InscriptionsPage = () => {
                     </div>
 
                     <div className="col-span-2 flex justify-end">
-                      <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                        <ExternalLink className="h-5 w-5" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                        {/* Annuler uniquement si pas déjà annulée ou terminée */}
+                        {inscription.etat !== "ANNULE" &&
+                          inscription.etat !== "TERMINE" && (
+                            <button
+                              title="Annuler l'inscription"
+                              onClick={() => handleAnnuler(inscription.id)}
+                              className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                            >
+                              <XCircle className="h-5 w-5" />
+                            </button>
+                          )}
+                      </div>
                     </div>
                   </div>
                 </div>
