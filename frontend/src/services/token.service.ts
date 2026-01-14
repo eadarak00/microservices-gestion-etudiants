@@ -16,6 +16,7 @@ interface DecodedToken {
     roles: string[];
   };
   name?: string;
+  email?: string;
 }
 
 /**
@@ -97,6 +98,16 @@ export const getStudentName = (): string => {
   const decoded = decodeToken();
   return decoded?.name || "Étudiant";
 };
+
+
+/**
+ * Recuperr l'email de l'utilisateur
+ * 
+*/
+export const getUserEmail = () : string | null => {
+  const decoded  = decodeToken();
+  return decoded?.email ?? null;
+}
 
 
 /**
