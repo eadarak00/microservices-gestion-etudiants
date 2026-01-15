@@ -14,3 +14,14 @@ export const getAllInscriptionEtudiants = (etudiantId : number) =>
 export const annulerInscription = (id: number) => {
   return api.put(`${BASE_URL}/${id}/annuler`);
 };
+
+export const getAllInscriptions = () =>
+  api.get<Inscription[]>(BASE_URL);
+
+export const terminerInscriptionAdmin = (id: number) => {
+  return api.put(`${BASE_URL}/${id}/terminer`);
+};
+
+export const suspendreInscriptionAdmin = (id: number) => {
+  return api.put(`${BASE_URL}/${id}/suspendre`);
+};

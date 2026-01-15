@@ -48,20 +48,24 @@ public class InscriptionController {
         return service.changerEtat(id, dto.getEtat());
     }
 
-
-     @PutMapping("/{id}/accepter")
+    @PutMapping("/{id}/terminer")
     @PreAuthorize("hasRole('ADMIN')")
     public InscriptionResponseDto terminerInscription(
             @PathVariable Long id) {
         return service.terminerInscription(id);
     }
 
-    @PutMapping("/{id}/annuler")
-    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
-    public InscriptionResponseDto annuler(@PathVariable Long id){
-        return service.annulerInscription(id);
+    @PutMapping("/{id}/suspendre")
+    @PreAuthorize("hasRole('ADMIN')")
+    public InscriptionResponseDto suspendre(@PathVariable Long id) {
+        return service.suspendreInscription(id);
     }
 
+    @PutMapping("/{id}/annuler")
+    @PreAuthorize("hasAnyRole('ADMIN','ETUDIANT')")
+    public InscriptionResponseDto annuler(@PathVariable Long id) {
+        return service.annulerInscription(id);
+    }
 
     @GetMapping("/classe/{classeId}")
     @PreAuthorize("hasAnyRole('ADMIN','ENSEIGNANT')")

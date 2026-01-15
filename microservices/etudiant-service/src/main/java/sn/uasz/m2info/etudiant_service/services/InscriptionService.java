@@ -162,4 +162,13 @@ public class InscriptionService {
                 return InscriptionMapper.toDto(inscriptionRepo.save(ins));
         }
 
+        @Transactional
+        public InscriptionResponseDto suspendreInscription(Long id) {
+                Inscription ins = inscriptionRepo.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("Inscription introuvable"));
+
+                ins.setEtat(EtatInscription.SUSPENDU);
+                return InscriptionMapper.toDto(inscriptionRepo.save(ins));
+        }
+
 }

@@ -4,7 +4,6 @@ import {
   Clock,
   Users,
   BarChart3,
-  ChevronRight,
   BookOpen,
   Bell,
   Award,
@@ -20,7 +19,6 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { getStudentName } from "../../services/token.service";
 
 const StudentDashboard = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("semaine");

@@ -15,6 +15,7 @@ import StudentProtectedRoute from "./StudentProtectedRoute";
 import StudentLayout from "../layouts/etudiant/StudentLayout";
 import StudentDashboard from "../pages/etudiants/StudentDashboard";
 import InscriptionsPage from "../pages/etudiants/InscriptionPage";
+import AdminInscriptionsPage from "../pages/admin/InscriptionAdmin";
 
 const AppRouter = () => {
   return (
@@ -42,6 +43,8 @@ const AppRouter = () => {
           <Route path="/admin/classes/:id" element={<ClasseDetail />} />
           <Route path="/admin/enseignants" element={<Enseignants />} />
           <Route path="/admin/enseignants/:id" element={<EnseignantDetail />} />
+          <Route path="/admin/inscriptions" element={<AdminInscriptionsPage />} />
+
         </Route>
 
         {/* Login etudiant */}
